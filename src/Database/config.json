@@ -1,7 +1,7 @@
 {
-        "uri": "mongodb+srv://admin:<password>@noteshare.vuftnwu.mongodb.net/?retryWrites=true&w=majority[3~",
-        "database": "MAHAN",
-        "collection": "MAHJAN",
-        "username": "MAMFIUJE",
-        "password": "FIEOJWOJIJOIEW"
+        "uri": "mongodb+srv://admin:admin@noteshare.vuftnwu.mongodb.net/?retryWrites=true&w=majority",
+        "database": "noteshare",
+        "collection": "notes",
+        "username": "admin",
+        "password": "admin"
     }
