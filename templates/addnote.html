@@ -13,11 +13,18 @@ function checkForWhiteSpace(event) {
     let title = document.getElementById("title").value;
     let content = document.getElementById("content").value;
 
-    if (title.includes(" ") || content.includes(" ")) {
-        alert("Title and content cannot contain spaces");
+    if (/^\s*$/.test(title)) {
+        alert("Title cannot be empty or contain only spaces");
+        event.preventDefault();
+    }
+
+    if (/^\s*$/.test(content)) {
+        alert("Content cannot be empty or contain only spaces");
         event.preventDefault();
     }
 }
+
+
 
     </script>
 </head>
