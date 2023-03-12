@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import json
+from bson.objectid import ObjectId
+
 
 config = json.load(open('src/Database/config.json'))
 
@@ -15,8 +17,8 @@ class Database:
     def __init__(self):
         self.collection = collection
         
-    def insertNote(self, id, title, content):
-        self.collection.insert_one({"id": id, "title": title, "content": content})
+    def insertNote(self, title, content):
+        self.collection.insert_one({"title": title, "content": content})
         
     def getNotes(self):
         return self.collection.find()
@@ -27,11 +29,11 @@ class Database:
     def deleteNote(self, id):
         self.collection.delete_one(id)
     
-    def updateNote(self, id, newNote):
-        self.collection.update_one(id, {"$set": newNote})
+    def updateNote(self, _id, newNote):
+        self.collection.update_one(_id, {"$set": newNote})
         
     def getNoteById(self, id):
-        return self.collection.find_one({"_id": id})
+        return self.collection.find_one({"_id": ObjectId(id)})
     
     def getNoteByTitle(self, title):
         return self.collection.find_one({"title": title})
@@ -39,5 +41,4 @@ class Database:
     def getNoteByContent(self, content):
         return self.collection.find_one({"content": content})
     
-Database = Database()
-Database.insertNote(1, "Hello", "World")
+    
