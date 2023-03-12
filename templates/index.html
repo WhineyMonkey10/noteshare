@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}">
     <title>Shared Notes</title>
 </head>
 <body>
-    <h1>Shared Notes</h1>
-    <ul>
-        {% for note in notes %}
-            <li>
-                
-                <a href="{{ url_for('note', id=note._id) }}">{{ note.title }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-
-    <a href="{{ url_for('addNote') }}">Add note</a>
+    <div class="container">
+        <h1>Shared Notes</h1>
+        <ul>
+            {% for note in notes %}
+                <li>
+                    <a href="{{ url_for('note', id=note._id) }}">{{ note.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="button-container">
+            <a href="{{ url_for('addNote') }}" class="button">Add note</a>
+        </div>
+    </div>
 </body>
 </html>

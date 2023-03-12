@@ -16,7 +16,8 @@ def index():
 def note(id):
     noteTitle = Database.getNoteById(id);noteTitle = noteTitle['title']
     noteContent = Database.getNoteById(id);noteContent = noteContent['content']
-    return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent)
+    noteID = Database.getNoteById(id);noteID = noteID['_id']
+    return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
 
 @app.route('/addNote', methods=['POST', 'GET'])
 def addNote():

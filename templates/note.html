@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loaded Note</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/note.css') }}">
+    <title>Loaded Note [{{ noteID }}]</title>
 </head>
 <body>
-    <h1>{{ noteTitle }}</h1>
-    <p>{{ noteContent }}</p>
-
-    <a href="{{ url_for('index') }}">Back to notes</a>
+    <div class="container">
+        <div class="note-card">
+            <h1>{{ noteTitle }}</h1>
+            <p>{{ noteContent }}</p>
+        </div>
+        <div class="back-to-index">
+            <a href="{{ url_for('index') }}">Back to notes</a>
+            <footer>Note ID: {{ noteID }}</footer>
+        </div>
+    </div>
 </body>
 </html>
