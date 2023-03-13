@@ -2,6 +2,7 @@ from src.Database.database import Database
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 import json
 from bson.objectid import ObjectId
+from waitress import serve
 Database = Database()
 
 
@@ -142,8 +143,4 @@ def manageNotes():
         return render_template('login.html')
     
 
-
-
-
-
-app.run(host='0.0.0.0', port=5000)
+serve(app, host='0.0.0.0', port=5000, threads=1)
