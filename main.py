@@ -66,5 +66,23 @@ def logout():
     session.pop('logged_in', None)
     return render_template('login.html')
 
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if 'logged_in' not in session:
+        if request.method == 'GET':
+            return render_template('register.html')
+        if request.method == 'POST':
+            username = request.form['Username']
+            password = request.form['Password']
+            if Database.register(username, password):
+                return render_template('login.html')
+            else:
+                return render_template('register.html')
+        return render_template('register.html')
+    else:
+        return index()
+
+
+
 
 app.run(host='0.0.0.0', port=5000)

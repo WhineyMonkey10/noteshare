@@ -9,16 +9,16 @@
 </head>
 <body class="container">
    
-    <form class="note-card" action="{{ url_for('login') }}" method="POST">
+    <form class="note-card" action="{{ url_for('register') }}" method="POST">
         <h1>Login</h1>
         <label for="title">Username</label>
         <input type="text" name="Username" id="Userame" required >
         <label for="content">Password</label>
         <input type="password" name="Password" id="Password" required></input>
-        <input type="submit" value="Login">
+        <input type="submit" value="Register">
     </form>
     <div class="button-container">
-        <a href="{{ url_for('register') }}" class="button">Register</a>
+        <a href="{{ url_for('login') }}" class="button">Login</a>
     </div>
     
 </body>
