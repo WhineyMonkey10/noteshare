@@ -48,15 +48,24 @@ else
         userCollection=$6
     fi
 
+    echo "Please enter the secret key"
+    if [ -z "$7" ]; then
+        read -p "Secret Key: " secretKey
+    else
+        secretKey=$7
+    fi
+
     // write the config file in JSON format
     echo "{
         \"uri\": \"$uri\",
         \"database\": \"$database\",
         \"collection\": \"$collection\",
         \"username\": \"$username\",
-        \"password\": \"$password\"
-        \"userCollection\": \"$userCollection\"
+        \"password\": \"$password\",
+        \"userCollection\": \"$userCollection\",
+        \"secretKey\": \"$secretKey\"
     }" > src/Database/config.json
+
 fi
 
 

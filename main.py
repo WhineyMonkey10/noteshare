@@ -1,10 +1,13 @@
 from src.Database.database import Database
 from flask import Flask, request, jsonify, render_template, session
+import json
 Database = Database()
 
 
 app = Flask(__name__)
-app.secret_key = '12312381289389123891238912389213'
+config = json.load(open('src/Database/config.json'))
+app.secret_key = config['secret_key']
+
 
 @app.route('/')
 def index():
