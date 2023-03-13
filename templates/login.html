@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/login.css') }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/login.css') }}" />
     <title>Login</title>
-</head>
-<body class="container">
-   
-    <form class="note-card" action="{{ url_for('login') }}" method="POST">
-        <h1>Login</h1>
-        <label for="title">Username</label>
-        <input type="text" name="Username" id="Userame" required >
-        <label for="content">Password</label>
-        <input type="password" name="Password" id="Password" required></input>
-        <input type="submit" value="Login">
+  </head>
+  <body class="login-container">
+    <form class="login-form" action="{{ url_for('login') }}" method="POST">
+      <h1>Login</h1>
+      <label for="title">Username</label>
+      <input type="text" name="Username" id="Userame" required />
+      <label for="content">Password</label>
+      <input type="password" name="Password" id="Password" required />
+      <input type="submit" value="Login" />
     </form>
-    <div class="back-to-index">
-        <a href="{{ url_for('register') }}" class="button">Register</a>
+    <div class="register-link-container">
+      <a href="{{ url_for('register') }}" class="register-link">Register</a>
     </div>
-    
-</body>
+  </body>
 </html>

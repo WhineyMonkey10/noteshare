@@ -1,6 +1,7 @@
 from src.Database.database import Database
-from flask import Flask, request, jsonify, render_template, session
+from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 import json
+from bson.objectid import ObjectId
 Database = Database()
 
 
@@ -52,6 +53,8 @@ def login():
                 session['username'] = username
                 session['password'] = password
                 session['logged_in'] = True
+                if session['username'] == 'admin':
+                    return render_template('admin.html')
                 return index()
             else:
                 return render_template('login.html')
@@ -81,6 +84,64 @@ def register():
         return render_template('register.html')
     else:
         return index()
+    
+@app.route('/admin', methods=['POST', 'GET'])
+def admin():
+    if 'logged_in' in session and session['username'] == 'admin':
+        return render_template('admin.html')
+    else:
+        if 'logged_in' in session:
+            return index()
+        else:
+            return render_template('login.html')
+    
+@app.route('/deleteNote/<id>', methods=['POST', 'GET'])
+def delete(id):
+    if 'logged_in' in session and session['username'] == 'admin':
+        Database.deleteNote({"_id": ObjectId(id)})
+        return admin()
+    else:
+        return render_template('index.html')
+    
+@app.route('/manageUser', methods=['POST', 'GET'])
+def manageUser():
+    if 'logged_in' in session and session['username'] == 'admin':
+        user = request.form['username']
+        if request.form.get('deleteAcc'):
+            Database.deleteAccount(user)
+        # Check if the checkbox is checked
+        if request.form.get('changeUsernameCheck') is not None:
+            newUsername = request.form['changeUsername']
+            Database.changeUsername(user, newUsername)
+        if request.form.get('changePasswordCheck') is not None:
+            newPassword = request.form['changePassword']
+            Database.changePassword(user, newPassword)
+        return redirect(url_for('admin'))
+    else:
+        return render_template('login.html')
+
+
+@app.route('/editNote/<id>', methods=['POST', 'GET'])
+def editNote(id):
+    pass
+
+@app.route('/manageNotes', methods=['POST', 'GET'])
+def manageNotes():
+    if 'logged_in' in session and session['username'] == 'admin':
+        noteid = request.form['noteId']
+        if request.form.get('deleteNote'):
+            Database.deleteNote({"_id": ObjectId(noteid)})
+        if request.form.get('changeTitleCheck'):
+            newTitle = request.form['changeTitle']
+            Database.changeTitle(noteid, newTitle)
+        if request.form.get('changeContentCheck'):
+            newContent = request.form['changeContent']
+            Database.changeContent(noteid, newContent)
+        return admin()
+    else:
+        return render_template('login.html')
+    
+
 
 
 
