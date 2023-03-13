@@ -1,8 +1,7 @@
 from src.Database.database import Database
 from flask import Flask, request, jsonify, render_template, session
-
 Database = Database()
-Database.insertNote("Jello is", "Yummy")
+
 
 app = Flask(__name__)
 app.secret_key = '12312381289389123891238912389213'
@@ -56,6 +55,13 @@ def login():
         return render_template('login.html')
     else:
         return index()
+
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    session.pop('username', None)
+    session.pop('password', None)
+    session.pop('logged_in', None)
+    return render_template('login.html')
 
 
 app.run(host='0.0.0.0', port=5000)
