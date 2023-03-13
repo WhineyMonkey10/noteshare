@@ -3,5 +3,6 @@
         "database": "noteshare",
         "collection": "notes",
         "username": "admin",
-        "password": "admin"
+        "password": "admin",
+        "userCollection": "users"
     }
