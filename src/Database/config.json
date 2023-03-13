@@ -4,5 +4,6 @@
         "collection": "notes",
         "username": "admin",
         "password": "admin",
-        "userCollection": "users"
+        "userCollection": "users",
+        "secretKey": "owijefjioewijofijoewfjiowejoifwojeif"
     }
