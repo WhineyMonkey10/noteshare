@@ -54,9 +54,37 @@ class Database:
             users.insert_one({"username": username, "password": password})
             return True
 
-    def deleteAccount(self, username, password):
-        if users.find_one({"username": username, "password": password}):
-            users.delete_one({"username": username, "password": password})
+    def deleteAccount(self, username):
+        if users.find_one({"username": username}):
+            users.delete_one({"username": username})
+            return True
+        else:
+            return False
+        
+    def changeUsername(self, username, newUsername):
+        if users.find_one({"username": username}):
+            users.update_one({"username": username}, {"$set": {"username": newUsername}})
+            return True
+        else:
+            return False
+        
+    def changePassword(self, username, newPassword):
+        if users.find_one({"username": username}):
+            users.update_one({"username": username}, {"$set": {"password": newPassword}})
+            return True
+        else:
+            return False
+        
+    def changeTitle(self, id, newTitle):
+        if self.collection.find_one({"_id": ObjectId(id)}):
+            self.collection.update_one({"_id": ObjectId(id)}, {"$set": {"title": newTitle}})
+            return True
+        else:
+            return False
+    
+    def changeContent(self, id, newContent):
+        if self.collection.find_one({"_id": ObjectId(id)}):
+            self.collection.update_one({"_id": ObjectId(id)}, {"$set": {"content": newContent}})
             return True
         else:
             return False

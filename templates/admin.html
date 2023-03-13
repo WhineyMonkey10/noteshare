@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}" />
+    <title>Admin Dashboard</title>
+  </head>
+  <body class="container">
+    <h1>Admin Dashboard</h1>
+    <form class="form-container" action="{{ url_for('manageUser') }}" method="POST">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input class="form-input" type="text" name="username" id="username" required />
+      </div>
+
+      <div class="form-group">
+        <input class="form-checkbox" type="checkbox" name="deleteAcc" id="deleteAcc" />
+        <label for="deleteAcc">Delete Account</label>
+      </div>
+
+      <div class="form-group">
+        <input class="form-checkbox" type="checkbox" name="changeUsernameCheck" id="changeUsernameCheck" />
+        <label for="changeUsername">Change Username</label>
+        <input class="form-input" type="text" name="changeUsername" id="changeUsername" />
+      </div>
+
+      <div class="form-group">
+        <input class="form-checkbox" type="checkbox" name="changePasswordCheck" id="changePasswordCheck" />
+        <label for="changePassword">Change Password</label>
+        <input class="form-input" type="text" name="changePassword" id="changePassword" />
+      </div>
+
+      <input class="form-submit" type="submit" value="Done" />
+    </form>
+
+    <form class="form-container" action="{{ url_for('manageNotes') }}" method="POST">
+      <div class="form-group">
+        <label for="noteTitle">Note ID</label>
+        <input class="form-input" type="text" name="noteId" id="noteId" required />
+      </div>
+
+      <div class="form-group">
+        <input class="form-checkbox" type="checkbox" name="deleteNote" id="deleteNote" />
+        <label for="deleteNote">Delete Note</label>
+      </div>
+
+      <div class="form-group">
+        <input class="form-checkbox" type="checkbox" name="changeTitleCheck" id="changeTitleCheck" />
+        <label for="changeTitle">Change Title</label>
+        <input class="form-input" type="text" name="changeTitle" id="changeTitle" />
+      </div>
+
+      <div class="form-group">
+        <input class="form-checkbox" type="checkbox" name="changeContentCheck" id="changeContentCheck" />
+        <label for="changeContent">Change Content</label>
+        <input class="form-input" type="text" name="changeContent" id="changeContent" />
+      </div>
+
+      <input class="form-submit" type="submit" value="Done" />
+    </form>
+  </body>
+</html>
