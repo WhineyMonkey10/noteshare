@@ -20,7 +20,7 @@ else
         database=$2
     fi
 
-    echo "Please enter the mongoDB collection name"
+    echo "Please enter the mongoDB collection name for the notes"
     if [ -z "$3" ]; then
         read -p "Collection: " collection
     else
@@ -41,6 +41,13 @@ else
         password=$5
     fi
 
+    echo "Please enter the mongoDB collection name for the users"
+    if [ -z "$6" ]; then
+        read -p "User Collection: " userCollection
+    else
+        userCollection=$6
+    fi
+
     // write the config file in JSON format
     echo "{
         \"uri\": \"$uri\",
@@ -48,6 +55,7 @@ else
         \"collection\": \"$collection\",
         \"username\": \"$username\",
         \"password\": \"$password\"
+        \"userCollection\": \"$userCollection\"
     }" > src/Database/config.json
 fi
 

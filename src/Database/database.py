@@ -10,6 +10,7 @@ config = json.load(open('src/Database/config.json'))
 client = MongoClient(config['uri'])
 database = client[config['database']]
 collection = database[config['collection']]
+users = database[config['userCollection']]
 
 print(f"Connected to {config['uri']}.")
 
@@ -40,5 +41,22 @@ class Database:
     
     def getNoteByContent(self, content):
         return self.collection.find_one({"content": content})
-    
-    
+    def login(self, username, password):
+        if users.find_one({"username": username, "password": password}):
+            return True
+        else:
+            return False
+
+    def register(self, username, password):
+        if users.find_one({"username": username}):
+            return False
+        else:
+            users.insert_one({"username": username, "password": password})
+            return True
+
+    def deleteAccount(self, username, password):
+        if users.find_one({"username": username, "password": password}):
+            users.delete_one({"username": username, "password": password})
+            return True
+        else:
+            return False
