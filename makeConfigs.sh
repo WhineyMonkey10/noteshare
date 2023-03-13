@@ -48,7 +48,7 @@ else
         userCollection=$6
     fi
 
-    echo "Please enter the secret key"
+    echo "Please enter a secret key"
     if [ -z "$7" ]; then
         read -p "Secret Key: " secretKey
     else
@@ -67,7 +67,3 @@ else
     }" > src/Database/config.json
 
 fi
-
-
-
-
