@@ -6,7 +6,7 @@ Database = Database()
 
 app = Flask(__name__)
 config = json.load(open('src/Database/config.json'))
-app.secret_key = config['secret_key']
+app.secret_key = config['secretKey']
 
 
 @app.route('/')
