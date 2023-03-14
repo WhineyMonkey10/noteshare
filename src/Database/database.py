@@ -57,11 +57,7 @@ class Database:
             if password == encrypt.decrypt(stored_password):
                 return True
         return False
-
-
-
-
-
+    
     def register(self, username, password):
         if ecryptionKey != "":
             password = password.encode('utf-8')
@@ -110,7 +106,3 @@ class Database:
         else:
             return False
     
-Database = Database()
-
-
-print(Database.login("tesergt", "tesergeriuogiuhreghuit"))
