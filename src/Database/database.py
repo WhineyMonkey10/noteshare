@@ -2,17 +2,26 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import json
 from bson.objectid import ObjectId
-
+from cryptography.fernet import Fernet
+import codecs
+import bson
 
 config = json.load(open('src/Database/config.json'))
+
 
 
 client = MongoClient(config['uri'])
 database = client[config['database']]
 collection = database[config['collection']]
 users = database[config['userCollection']]
+ecryptionKey = config['encryptionKey']
+
+
+if ecryptionKey != "":
+    encrypt = Fernet(codecs.encode((ecryptionKey).encode('utf-8'), 'base64'))     
 
 print(f"Connected to {config['uri']}.")
+    
 
 class Database:
     def __init__(self):
@@ -42,12 +51,21 @@ class Database:
     def getNoteByContent(self, content):
         return self.collection.find_one({"content": content})
     def login(self, username, password):
-        if users.find_one({"username": username, "password": password}):
-            return True
-        else:
-            return False
+        if ecryptionKey != "":
+            password = password.encode('utf-8')
+            stored_password = users.find_one({"username": username})["password"]
+            if password == encrypt.decrypt(stored_password):
+                return True
+        return False
+
+
+
+
 
     def register(self, username, password):
+        if ecryptionKey != "":
+            password = password.encode('utf-8')
+            password = encrypt.encrypt(password)
         if users.find_one({"username": username}):
             return False
         else:
@@ -69,6 +87,9 @@ class Database:
             return False
         
     def changePassword(self, username, newPassword):
+        if ecryptionKey != "":
+            newPassword = newPassword.encode('utf-8')
+            newPassword = encrypt.encrypt(newPassword)
         if users.find_one({"username": username}):
             users.update_one({"username": username}, {"$set": {"password": newPassword}})
             return True
@@ -88,3 +109,8 @@ class Database:
             return True
         else:
             return False
+    
+Database = Database()
+
+
+print(Database.login("tesergt", "tesergeriuogiuhreghuit"))

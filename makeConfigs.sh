@@ -55,6 +55,25 @@ else
         secretKey=$7
     fi
 
+    if [ -z "$8" ]; then
+        read -p "Encrypted? (y/n): " encrypted
+    else
+        encrypted=$8
+    fi
+
+    if [ "$encrypted" = "y" ]; then
+        echo "Please enter the encryption key"
+        if [ -z "$9" ]; then
+            read -p "Encryption Key: " encryptionKey
+            while [ ${#encryptionKey} -lt 32 ]; do
+                echo "Encryption key must be 32 bytes long"
+                read -p "Encryption Key: " encryptionKey
+            done
+        else
+            encryptionKey=$9
+        fi
+    fi
+
     // write the config file in JSON format
     echo "{
         \"uri\": \"$uri\",
@@ -63,7 +82,7 @@ else
         \"username\": \"$username\",
         \"password\": \"$password\",
         \"userCollection\": \"$userCollection\",
-        \"secretKey\": \"$secretKey\"
+        \"secretKey\": \"$secretKey\",
+        \"encryptionKey\": \"$encryptionKey\"
     }" > src/Database/config.json
-
 fi
