@@ -1,2 +1,5 @@
 src/Database/config.json
 .vercel
+src/Database/__pycache__/__init__.cpython-310.pyc
+src/Database/__pycache__/config.cpython-310.pyc
+src/Database/__pycache__/
