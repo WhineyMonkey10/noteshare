@@ -55,6 +55,8 @@ class Database:
             password = password.encode('utf-8')
             stored_password = users.find_one({"username": username})["password"]
             if password == encrypt.decrypt(stored_password):
+                if username == "admin":
+                    return "adminID"
                 return True
         return False
     
@@ -105,4 +107,3 @@ class Database:
             return True
         else:
             return False
-    
