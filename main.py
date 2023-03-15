@@ -56,7 +56,8 @@ def login():
                 session['logged_in'] = True
                 if Database.login(username, password) == "adminID":
                     return render_template('admin.html')
-                return index()
+                else:
+                    return index()
             else:
                 return render_template('login.html')
         return render_template('login.html')
