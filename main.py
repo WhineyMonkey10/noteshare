@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, render_template, session, redirect, u
 import json
 from bson.objectid import ObjectId
 from waitress import serve
+from logging import FileHandler,WARNING
 Database = Database()
 
 
@@ -144,3 +145,5 @@ def manageNotes():
     
 
 serve(app, host='0.0.0.0', port=5000, threads=1)
+file_handler = FileHandler('errorlog.txt')
+file_handler.setLevel(WARNING)
