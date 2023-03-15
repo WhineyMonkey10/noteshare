@@ -3,7 +3,6 @@ from flask import Flask, request, jsonify, render_template, session, redirect, u
 import json
 from bson.objectid import ObjectId
 from waitress import serve
-from logging import FileHandler,WARNING
 Database = Database()
 
 
@@ -55,7 +54,7 @@ def login():
                 session['username'] = username
                 session['password'] = password
                 session['logged_in'] = True
-                if session['username'] == 'admin' or session['username'] == 'Mc Skcot':
+                if Database.login(username, password) == "adminID":
                     return render_template('admin.html')
                 return index()
             else:
@@ -143,7 +142,5 @@ def manageNotes():
     else:
         return render_template('login.html')
     
-
-serve(app, host='0.0.0.0', port=5000, threads=1)
-file_handler = FileHandler('errorlog.txt')
-file_handler.setLevel(WARNING)
+if __name__ == '__main__':
+    serve(app, host='0.0.0.0', port=5000, threads=1)
