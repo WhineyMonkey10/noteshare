@@ -17,6 +17,13 @@
             "src": "(.*)",
             "dest": "main.py"
         }
-    ]
+    ],
+
+    "projectSettings": {
+        "framework": "python",
+        "devCommand": "python main.py",
+        "buildCommand": "python main.py",
+        "outputDirectory": "public"
+    }
   }
   
