@@ -5,8 +5,10 @@
             "src": "*.py",
             "use": "@vercel/python",
             "config": {
-                "maxLambdaSize": "10mb"
+                "maxLambdaSize": "100mb"
             }
+
+            
             
         }
     ],
@@ -17,3 +19,4 @@
         }
     ]
   }
+  
