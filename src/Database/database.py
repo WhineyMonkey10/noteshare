@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, srv_resolver
 from pymongo.errors import ConnectionFailure
 import json
 from bson.objectid import ObjectId
