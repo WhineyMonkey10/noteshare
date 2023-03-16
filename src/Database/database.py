@@ -4,7 +4,6 @@ import json
 from bson.objectid import ObjectId
 from cryptography.fernet import Fernet
 import codecs
-import bson
 
 config = json.load(open('src/Database/config.json'))
 
