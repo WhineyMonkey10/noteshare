@@ -1,5 +1,5 @@
 from src.Database.database import Database
-from flask import Flask, request, jsonify, render_template, session, redirect, url_for
+from flask import Flask, request, render_template, session, redirect, url_for
 import json
 from bson.objectid import ObjectId
 from waitress import serve
@@ -54,10 +54,9 @@ def login():
                 session['username'] = username
                 session['password'] = password
                 session['logged_in'] = True
-                if Database.login(username, password) == "adminID":
+                if username == "admin":
                     return render_template('admin.html')
-                else:
-                    return index()
+                return index()
             else:
                 return render_template('login.html')
         return render_template('login.html')
