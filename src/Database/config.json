@@ -1,0 +1,11 @@
+{
+    "uri": "mongodb+srv://DatabaseAccess:huwefhuiewuhifuhiewhfuidshuifhiuweiuhdsiuhefuihds@noteshare.vuftnwu.mongodb.net/?retryWrites=true&w=majority",
+    "database": "noteshare",
+    "collection": "notes",
+    "username": "admin",
+    "password": "admin",
+    "userCollection": "users",
+    "secretKey": "weiojfiojwefjoiewiojfewiojewfiojefwoijjweiofjieowfjieowfjfioewjoiewojifewjiwe",
+    "encryptionKey": "12345678901234567890123456789012"
+    
+}
