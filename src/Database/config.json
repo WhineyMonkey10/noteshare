@@ -6,6 +6,6 @@
         "password": "admin",
         "userCollection": "users",
         "secretKey": "weiojfiojwefjoiewiojfewiojewfiojefwoijjweiofjieowfjieowfjfioewjoiewojifewjiwe",
-        "encryptionKey": "oei20jfoijergoijergoijergoijergoeijrgjioeargjioerg"
+        "encryptionKey": "12345678901234567890123456789012"
         
     }
