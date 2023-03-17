@@ -8,14 +8,30 @@
     <title>Noteshare - Dashboard</title>
 </head>
 <body>
-    
-    <h1>Dashboard</h1>
-    <h2>Hi {{username}}</h2>
-    <a href="/logout">Logout</a>
-    <a href="/addNote">Add note</a>
-    <a href="/publicNotes">Public Notes</a>
-    <a href="/protectedNotes">Password Protected Notes</a>
-    <a href="/privateNotes">Private Notes</a>
-
+    <header>
+        <div class="header-container">
+            <h1>Noteshare Dashboard</h1>
+            <div class="user-menu">
+                <button class="profile-btn">Manage Profile</button>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section>
+            <h2>Dashboard</h2>
+            <p>Hi {{username}}, welcome to your dashboard!</p>
+            <p>Here you can manage your notes:</p>
+            <ul>
+                <li><a href="/addNote">Create a new note</a></li>
+                <li><a href="/publicNotes">View public notes</a></li>
+                <li><a href="/protectedNotes">View your password protected notes</a></li>
+                <li><a href="/privateNotes">View your private notes</a></li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>User ID: {{userID}}</p>
+    </footer>
 </body>
 </html>

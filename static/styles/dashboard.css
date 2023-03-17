@@ -1,53 +1,115 @@
 body {
-    background-color: #F7F7F7;
-    font-family: sans-serif;
+    background-color: #f9f9f9;
+    font-family: 'Helvetica Neue', sans-serif;
     margin: 0;
+    padding: 0;
 }
 
 h1 {
-    font-size: 36px;
-    margin: 40px auto 20px;
     text-align: center;
+    margin-top: 50px;
+    color: #2a2a2a;
 }
 
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-li {
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+h2 {
     text-align: center;
-    width: 250px;
+    margin-top: 20px;
+    color: #2a2a2a;
 }
 
 a {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 20px auto;
-    border-radius: 5px;
-    background-color: #3E8E41;
-    color: white;
-    text-decoration: none;
+    display: block;
     text-align: center;
-    font-weight: bold;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
 }
 
 a:hover {
-    background-color: #2C6F2F;
+    background-color: #3e8e41;
 }
 
-footer {
-    font-size: 12px;
-    margin: 20px auto 0;
+.sidebar {
+    background-color: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 200px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px #d9d9d9;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    background-color: #f1f1f1;
+    color: #2a2a2a;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #d9d9d9;
+}
+
+.user-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.user-menu__icon {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.user-menu__button {
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    color: #2a2a2a;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.user-menu__button:hover {
+    background-color: #f1f1f1;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+    width: 100%;
+    background-color: #4caf50;
+    color: #fff;
     text-align: center;
-    color: #999;
+    font-size: 14px;
+    padding: 5px;
+}
+
+.footer__userid {
+    font-weight: bold;
+    margin-right: 5px;
 }
