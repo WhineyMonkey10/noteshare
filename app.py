@@ -28,7 +28,7 @@ def note(id):
         protected = Database.getNoteById(id);protected = protected['protected']
         if protected == "True":
             return render_template('protectednote.html', noteID=noteID)
-        return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+        return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=Database.getUserID(session['username']))
     else:
         return render_template('login.html')
 
@@ -43,10 +43,10 @@ def accessProtectedNote(id):
             protected = Database.getNoteById(id);protected = protected['protected']
             if protected == "True":
                 if password == Database.getNoteById(id)['password']:
-                    return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+                    return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=Database.getUserID(session['username']))
                 else:
                     return render_template('protectednote.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
-            return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+            return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=Database.getUserID(session['username']))
         return render_template('login.html')
     else:
         return render_template('login.html')
@@ -59,9 +59,9 @@ def addNote():
             content = request.form['content']
             if request.form.get('isPublic') is not None:
                 password = request.form['password']
-                Database.insertNoteWithPassword(title, content, password)
+                Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']))
             else:
-                Database.insertNote(title, content)
+                Database.insertNote(title, content, Database.getUserID(session['username']))
             return index()
         return render_template('addnote.html')
     else:
@@ -170,7 +170,7 @@ def manageNotes():
 @app.route('/', methods=['POST', 'GET'])
 def dashboard():
     if 'logged_in' in session:
-        return render_template('dashboard.html', username=session['username'])
+        return render_template('dashboard.html', username=session['username'], userID=Database.getUserID(session['username']))
     else:
         return render_template('login.html')
         
