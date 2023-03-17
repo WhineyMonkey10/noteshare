@@ -81,7 +81,7 @@ def login():
                 session['logged_in'] = True
                 if username == "admin":
                     return render_template('admin.html')
-                return index()
+                return dashboard()
             else:
                 return render_template('login.html')
         return render_template('login.html')
