@@ -11,7 +11,7 @@ config = json.load(open('src/Database/config.json'))
 app.secret_key = config['secretKey']
 
 
-@app.route('/')
+@app.route('/publicNotes')
 def index():
     if 'logged_in' in session:
         notes = Database.getNotes()
@@ -19,14 +19,35 @@ def index():
     else:
         return render_template('login.html')
 
-# Page to load the note when user clicks on the title
 @app.route('/note/<id>')
 def note(id):
     if 'logged_in' in session:
         noteTitle = Database.getNoteById(id);noteTitle = noteTitle['title']
         noteContent = Database.getNoteById(id);noteContent = noteContent['content']
         noteID = Database.getNoteById(id);noteID = noteID['_id']
+        protected = Database.getNoteById(id);protected = protected['protected']
+        if protected == "True":
+            return render_template('protectednote.html', noteID=noteID)
         return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+    else:
+        return render_template('login.html')
+
+@app.route('/accessProtectedNote/<id>', methods=['POST', 'GET'])
+def accessProtectedNote(id):
+    if 'logged_in' in session:
+        if request.method == 'POST':
+            password = request.form['password']
+            noteTitle = Database.getNoteById(id);noteTitle = noteTitle['title']
+            noteContent = Database.getNoteById(id);noteContent = noteContent['content']
+            noteID = Database.getNoteById(id);noteID = noteID['_id']
+            protected = Database.getNoteById(id);protected = protected['protected']
+            if protected == "True":
+                if password == Database.getNoteById(id)['password']:
+                    return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+                else:
+                    return render_template('protectednote.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+            return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+        return render_template('login.html')
     else:
         return render_template('login.html')
 
@@ -36,7 +57,11 @@ def addNote():
         if request.method == 'POST':
             title = request.form['title']
             content = request.form['content']
-            Database.insertNote(title, content)
+            if request.form.get('isPublic') is not None:
+                password = request.form['password']
+                Database.insertNoteWithPassword(title, content, password)
+            else:
+                Database.insertNote(title, content)
             return index()
         return render_template('addnote.html')
     else:
@@ -142,5 +167,12 @@ def manageNotes():
     else:
         return render_template('login.html')
     
+@app.route('/', methods=['POST', 'GET'])
+def dashboard():
+    if 'logged_in' in session:
+        return render_template('dashboard.html', username=session['username'])
+    else:
+        return render_template('login.html')
+        
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)

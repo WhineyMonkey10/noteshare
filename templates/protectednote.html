@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/protectednote.css') }}">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Please Unlock The Note [{{ noteID }}]</title>
+</head>
+<body>
+    <div class="container">
+        <div class="note-card">
+            <form action="{{ url_for('accessProtectedNote', id=noteID) }}" method="POST">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password">
+                <input type="submit" value="Unlock">
+            </form>
+        </div>
+        <div class="back-to-index">
+            <a href="{{ url_for('index') }}">Back to notes</a>
+            <footer>Note ID: {{ noteID }}</footer>
+        </div>
+    </div>
+</body>
+</html>

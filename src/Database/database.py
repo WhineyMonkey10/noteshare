@@ -27,7 +27,10 @@ class Database:
         self.collection = collection
         
     def insertNote(self, title, content):
-        self.collection.insert_one({"title": title, "content": content})
+        self.collection.insert_one({"title": title, "content": content, "protected": "False"})
+        
+    def insertNoteWithPassword(self, title, content, password):
+        self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True"})
         
     def getNotes(self):
         return self.collection.find()
