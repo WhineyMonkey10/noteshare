@@ -12,6 +12,9 @@
 <body>
     <div class="container">
         <h1>Shared Notes</h1>
+        <div class="button-container">
+            <a href="{{ url_for('addNote') }}" class="button">Add note</a>
+        </div>
         <ul>
             {% for note in notes %}
                 <li>
@@ -20,7 +23,6 @@
             {% endfor %}
         </ul>
         <div class="button-container">
-            <a href="{{ url_for('addNote') }}" class="button">Add note</a>
             <a href="{{ url_for('logout') }}" class="button">Logout</a>
         </div>
     </div>
