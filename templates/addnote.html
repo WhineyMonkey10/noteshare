@@ -9,22 +9,20 @@
     <title>Add note</title>
 
     <script>
+        function checkForWhiteSpace(event) {
+            let title = document.getElementById("title").value;
+            let content = document.getElementById("content").value;
 
-function checkForWhiteSpace(event) {
-    let title = document.getElementById("title").value;
-    let content = document.getElementById("content").value;
+            if (/^\s*$/.test(title)) {
+                alert("Title cannot be empty or contain only spaces");
+                event.preventDefault();
+            }
 
-    if (/^\s*$/.test(title)) {
-        alert("Title cannot be empty or contain only spaces");
-        event.preventDefault();
-    }
-
-    if (/^\s*$/.test(content)) {
-        alert("Content cannot be empty or contain only spaces");
-        event.preventDefault();
-    }
-}
-
+            if (/^\s*$/.test(content)) {
+                alert("Content cannot be empty or contain only spaces");
+                event.preventDefault();
+            }
+        }
     </script>
 </head>
 <body>
@@ -40,16 +38,14 @@ function checkForWhiteSpace(event) {
         <div class="form-group">
             <input class="form-checkbox" type="checkbox" name="isPublic" id="isPublic">
             <label for="isPublic" class="form-checkbox-label">Password Protection</label>
-          </div>
-          
-          <div class="form-group">
+        </div>
+
+        <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" style="margin-top: 10px; padding: 5px 10px; display: block; margin-bottom: 20px;">
-          </div>
-          
-          <input type="submit" value="Add note">
-          
-        
+            <input type="password" name="password" id="password" placeholder="Password">
+        </div>
+
+        <input type="submit" value="Add note">
     </form>
 
 </body>
