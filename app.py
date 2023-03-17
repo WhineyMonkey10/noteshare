@@ -36,7 +36,7 @@ def note(id):
 def accessProtectedNote(id):
     if 'logged_in' in session:
         if request.method == 'POST':
-            password = request.form['password']
+            password = request.form['protPass']
             noteTitle = Database.getNoteById(id);noteTitle = noteTitle['title']
             noteContent = Database.getNoteById(id);noteContent = noteContent['content']
             noteID = Database.getNoteById(id);noteID = noteID['_id']
