@@ -35,6 +35,30 @@ input[type="text"], textarea {
     box-shadow: inset 0px 0px 5px 0px #d9d9d9;
 }
 
+input[type="password"] {
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    box-shadow: inset 0px 0px 5px 0px #d9d9d9;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+}
+
+.form-group .form-checkbox {
+    margin-right: 10px;
+}
+
+.form-checkbox-label {
+    margin-left: 5px;
+}
+
 input[type="submit"] {
     border-radius: 5px;
     border: none;
@@ -48,102 +72,27 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #3e8e41;
-    }
-    
+}
+
 .back-to-index {
-margin-top: 20px;
-text-align: center;
-font-size: 14px;
-color: #7f7f7f;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #7f7f7f;
 }
 
 .back-to-index a {
-color: #7f7f7f;
-text-decoration: none;
+    color: #7f7f7f;
+    text-decoration: none;
 }
 
 .back-to-index a:hover {
-color: #2a2a2a;
+    color: #2a2a2a;
 }
 
 footer {
-margin-top: 10px;
-font-size: 12px;
-color: #7f7f7f;
-text-align: center;
-}
-
-.form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.form-checkbox {
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
-    appearance: none;
-    border: 1px solid #d9d9d9;
-    border-radius: 3px;
-    cursor: pointer;
-    position: relative;
-}
-
-.form-checkbox:checked::before {
-    content: "\2713";
-    position: absolute;
-    top: 1px;
-    left: 5px;
-    font-size: 16px;
-    color: #fff;
-}
-
-.form-checkbox:focus {
-    outline: none;
-    border-color: #4caf50;
-    box-shadow: 0px 0px 5px 0px #4caf50;
-}
-
-.form-checkbox-label {
-    font-weight: normal;
-    margin-bottom: 0;
-}
-
-.form-group input[type="password"] {
-    border-radius: 5px;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    font-size: 16px;
-    margin-bottom: 20px;
-    box-shadow: inset 0px 0px 5px 0px #d9d9d9;
-}
-.form-group input[type="password"]:focus {
-    outline: none;
-    border-color: #4caf50;
-    box-shadow: 0px 0px 5px 0px #4caf50;
-}
-
-.form-group {
-    position: relative;
-}
-
-.form-checkbox-label {
-    position: absolute;
-    left: 30px;
-    top: 0;
-    z-index: 1;
-    cursor: pointer;
-}
-
-.form-checkbox {
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 2;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #7f7f7f;
+    text-align: center;
 }
