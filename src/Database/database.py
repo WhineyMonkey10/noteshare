@@ -55,9 +55,12 @@ class Database:
     def login(self, username, password):
         if ecryptionKey != "":
             password = password.encode('utf-8')
-            stored_password = users.find_one({"username": username})["password"]
-            if password == encrypt.decrypt(stored_password):
-                return True
+            if users.find_one({"username": username}):
+                stored_password = users.find_one({"username": username})["password"]
+                if password == encrypt.decrypt(stored_password):
+                    return True
+            else:
+                return False
         return False
     
     def register(self, username, password):
