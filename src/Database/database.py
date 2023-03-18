@@ -168,3 +168,40 @@ class Database:
                 users.update_one({"_id": ObjectId(userID)}, {"$set": {"passwordNoteCount": 0}})
             return total_count
     
+    def checkUsername(self, username):
+        if users.find_one({"username": username}):
+            return True
+        else:
+            return False
+        
+    def checkPassword(self, username, password):
+        if users.find_one({"username": username}):
+            if ecryptionKey != "":
+                password = password.encode('utf-8')
+                stored_password = users.find_one({"username": username})["password"]
+                if password == encrypt.decrypt(stored_password):
+                    return True
+            else:
+                if users.find_one({"username": username})["password"] == password:
+                    return True
+            return False
+    
+    def changeUsername(self, username, newUsername):
+        if users.find_one({"username": username}):
+            users.update_one({"username": username}, {"$set": {"username": newUsername}})
+            return True
+        else:
+            return False
+        
+    def changePassword(self, username, newPassword):
+        if users.find_one({"username": username}):
+            if ecryptionKey != "":
+                 newPassword = newPassword.encode('utf-8')
+                 newPassword = encrypt.encrypt(newPassword)
+                 users.update_one({"username": username}, {"$set": {"password": newPassword}})
+                 return True
+            else:
+                users.update_one({"username": username}, {"$set": {"password": newPassword}})
+                return True
+        else:
+            return False

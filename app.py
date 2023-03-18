@@ -227,5 +227,39 @@ def passwordProtectedNoteList(userID):
     else:
         return render_template('login.html')
 
+@app.route('/manageProfile', methods=['POST', 'GET'])
+def manageProfile():
+    if 'logged_in' in session:
+        return render_template('manageProfile.html', message="")
+
+@app.route('/editProfile', methods=['POST', 'GET'])
+def editProfile():
+    if 'logged_in' in session:
+        newUsername = request.form['username']
+        newPassword = request.form['password']
+        userID = Database.getUserID(session['username'])
+
+        if Database.checkUsername(session['username']):
+             if Database.checkPassword(session['username'],session['password']):
+                if Database.changePassword(session['username'], newPassword):
+                    if Database.changeUsername(session['username'], newUsername):
+                        session['username'] = newUsername
+                        session['password'] = newPassword
+                        return render_template('manageProfile.html', message="Profile updated successfully")
+                    else:
+                        return render_template('manageProfile.html', message="Error updating password")
+                else:
+                    return render_template('manageProfile.html', message="Error updating username")
+        else:
+            return render_template('manageProfile.html', message="Error updating profile")
+    else:
+        return render_template('login.html')
+        
+        
+
+@app.route('/deleteProfile', methods=['POST', 'GET'])
+def deleteProfile():
+    return render_template('manageProfile.html')
+
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)
