@@ -26,11 +26,11 @@ class Database:
     def __init__(self):
         self.collection = collection
         
-    def insertNote(self, title, content, userID):
-        self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID})
+    def insertNote(self, title, content, userID, private):
+        self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private})
         
-    def insertNoteWithPassword(self, title, content, password, userID):
-        self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID})
+    def insertNoteWithPassword(self, title, content, password, userID, private):
+        self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private})
         
     def getNotes(self):
         return self.collection.find()
@@ -116,3 +116,15 @@ class Database:
             return users.find_one({"username": username})["_id"]
         else:
             return False
+        
+    def getPrivateNotes(self, userID):
+        privateNotes = []
+        for note in self.collection.find({"userID": userID}):
+            if note["private"] == "True":
+                privateNotes.append(note)
+        return privateNotes
+    
+    def getNoteCreator(self, noteID):
+        return self.collection.find_one({"_id": ObjectId(noteID)})["userID"]
+
+    
