@@ -40,7 +40,7 @@ def privateNotes(id, noteCreator, noteID):
             content = note['content']
             creator = note['userID']
             return render_template('note.html', noteTitle=title, noteContent=content, noteID=id, userID=creator)
-        return login()
+        return render_template('alertMessage.html', message='You do not have access to this note.')
     else:
         return login()
 
