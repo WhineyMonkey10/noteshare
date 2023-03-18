@@ -33,7 +33,8 @@ class Database:
         self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private})
         
     def getNotes(self):
-        return self.collection.find()
+        publicNotes = self.collection.find({"private": "False"})
+        return publicNotes
     
     def deleteNotes(self):
         self.collection.delete_many({})
