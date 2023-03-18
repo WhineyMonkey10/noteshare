@@ -28,10 +28,19 @@ class Database:
         
     def insertNote(self, title, content, userID, private):
         self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private})
+        if private == "True":
+            users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
+        elif private == "False":
+            users.update_one({"_id": ObjectId(userID)}, {"$inc": {"publicNoteCount": 1}})
+            
+        
         
     def insertNoteWithPassword(self, title, content, password, userID, private):
         self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private})
-        
+        if private == "True":
+            users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
+        elif private == "False":
+            users.update_one({"_id": ObjectId(userID)}, {"$inc": {"passwordNoteCount": 1}})
     def getNotes(self):
         publicNotes = self.collection.find({"private": "False"})
         return publicNotes
@@ -134,3 +143,28 @@ class Database:
             if note["protected"] == "True":
                 passwordProtectedNotes.append(note)
         return passwordProtectedNotes
+    
+    def getStatistics(self, userID, type):
+        user = users.find_one({"_id": ObjectId(userID)})
+        if type == "private":
+            return user["privateNoteCount"]
+        elif type == "public":
+            return user["publicNoteCount"]
+        elif type == "password":
+            return user["passwordNoteCount"]
+        elif type == "total":
+            total_count = 0
+            if "privateNoteCount" in user:
+                total_count += user["privateNoteCount"]
+            else:
+                users.update_one({"_id": ObjectId(userID)}, {"$set": {"privateNoteCount": 0}})
+            if "publicNoteCount" in user:
+                total_count += user["publicNoteCount"]
+            else:
+                users.update_one({"_id": ObjectId(userID)}, {"$set": {"publicNoteCount": 0}})
+            if "passwordNoteCount" in user:
+                total_count += user["passwordNoteCount"]
+            else:
+                users.update_one({"_id": ObjectId(userID)}, {"$set": {"passwordNoteCount": 0}})
+            return total_count
+    
