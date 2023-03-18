@@ -65,6 +65,7 @@ def note(id):
         private = Database.getNoteById(id);private = private['private']
         if private == "True":
             return privateNotes(Database.getUserID(session['username']), noteCreator, noteID)
+        
         return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
     else:
         return render_template('login.html')
@@ -100,15 +101,15 @@ def addNote():
         if request.method == 'POST':
             title = request.form['title']
             content = request.form['content']
-            if request.form.get('isPrivate') is not None:
+            if request.form.get('isPrivate') is not None and request.form.get('isPublic') is not None:
+                return render_template('alertMessage.html', message="You cannot password protect a private note.")
+            
+            elif request.form.get('isPrivate') is not None:
                 Database.insertNote(title, content, Database.getUserID(session['username']), "True")
                 
             elif request.form.get('isPublic') is not None:
                 password = request.form['password']
                 Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
-            
-            elif request.form.get('isPrivate') and request.form.get('isPublic') is not None:
-                Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True")
                 
             else:
                 Database.insetNote(title, content, Database.getUserID(session['username']), "False")
