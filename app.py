@@ -259,7 +259,17 @@ def editProfile():
 
 @app.route('/deleteProfile', methods=['POST', 'GET'])
 def deleteProfile():
-    return render_template('manageProfile.html')
+    if 'logged_in' in session:
+        if request.method == 'POST':
+            if Database.deleteAccount(session['username']):
+                session.pop('username', None)
+                session.pop('password', None)
+                session.pop('logged_in', None)
+                return render_template('login.html')
+            else:
+                return render_template('manageProfile.html', message="Error deleting account")
+    else:
+        return login()
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)
