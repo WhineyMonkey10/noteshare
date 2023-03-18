@@ -218,6 +218,14 @@ def privateNoteList(userID):
     else:
         return render_template('login.html')
 
+@app.route('/passwordProtectedNoteList/<userID>', methods=['POST', 'GET'])
+def passwordProtectedNoteList(userID):
+    if 'logged_in' in session:
+        userID = Database.getUserID(session['username'])
+        note = Database.getPasswordProtectedNotes(userID)
+        return render_template('passwordProtectedNoteList.html', notes = note, userID=Database.getUserID(session['username']))
+    else:
+        return render_template('login.html')
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)

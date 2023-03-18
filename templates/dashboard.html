@@ -28,7 +28,7 @@
         <ul>
           <li><a href="/addNote">Create a new note</a></li>
           <li><a href="/publicNotes">View public notes</a></li>
-          <li><a href="/protectedNotes">View your password protected notes</a></li>
+          <li><a href="{{ url_for('passwordProtectedNoteList', userID=userID)}}">View your password protected notes</a></li>
           <li><a href="{{ url_for('privateNoteList', userID=userID)}}">View your private notes</a></li>
         </ul>
       </div>

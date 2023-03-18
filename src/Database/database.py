@@ -127,3 +127,10 @@ class Database:
     
     def getNoteCreator(self, noteID):
         return self.collection.find_one({"_id": ObjectId(noteID)})["userID"]
+    
+    def getPasswordProtectedNotes(self, userID):
+        passwordProtectedNotes = []
+        for note in self.collection.find({"userID": userID}):
+            if note["protected"] == "True":
+                passwordProtectedNotes.append(note)
+        return passwordProtectedNotes
