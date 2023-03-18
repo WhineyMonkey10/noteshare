@@ -82,6 +82,8 @@ def accessProtectedNote(id):
             private = Database.getNoteById(id);private = private['private']
             
             if protected == "True" and private == "True":
+                if Database.getNoteCreator(noteID) != Database.getUserID(session['username']):
+                    return render_template('alertMessage.html', message='You do not have access to this note.')
                 if password == Database.getNoteById(id)['password']:
                     return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID), noteID)
             if protected == "True":
