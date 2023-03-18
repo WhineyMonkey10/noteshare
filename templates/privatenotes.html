@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <title>Private Notes</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Private Notes</h1>
+        <div class="button-container">
+            <a href="{{ url_for('addNote') }}" class="button">Add note</a>
+        </div>
+        <ul>
+            {% for note in notes %}
+                <li>
+                    <a href="{{ url_for('note', id=note._id) }}">{{ note.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="button-container">
+            <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
