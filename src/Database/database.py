@@ -126,5 +126,3 @@ class Database:
     
     def getNoteCreator(self, noteID):
         return self.collection.find_one({"_id": ObjectId(noteID)})["userID"]
-
-    
