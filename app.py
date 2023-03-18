@@ -115,7 +115,7 @@ def addNote():
                 Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
                 
             else:
-                Database.insetNote(title, content, Database.getUserID(session['username']), "False")
+                Database.insertNote(title, content, Database.getUserID(session['username']), "False")
             
             return index()
         return render_template('addnote.html')
@@ -209,6 +209,14 @@ def dashboard():
     else:
         return render_template('login.html')
 
+@app.route('/privateNoteList/<userID>', methods=['POST', 'GET'])
+def privateNoteList(userID):
+    if 'logged_in' in session:
+        userID = Database.getUserID(session['username'])
+        note = Database.getPrivateNotes(userID)
+        return render_template('privatenotes.html', notes = note, userID=Database.getUserID(session['username']))
+    else:
+        return render_template('login.html')
 
 
 if __name__ == '__main__':
