@@ -49,7 +49,11 @@ class Database:
         self.collection.delete_many({})
         
     def deleteNote(self, id):
-        self.collection.delete_one(id)
+        try:
+            self.collection.delete_one(id)
+            return True
+        except:
+            return False
     
     def updateNote(self, _id, newNote):
         self.collection.update_one(_id, {"$set": newNote})
@@ -135,7 +139,11 @@ class Database:
         return privateNotes
     
     def getNoteCreator(self, noteID):
-        return self.collection.find_one({"_id": ObjectId(noteID)})["userID"]
+        if self.collection.find_one({"_id": ObjectId(noteID)}):
+            userID = self.collection.find_one({"_id": ObjectId(noteID)})["userID"]
+            return users.find_one({"_id": ObjectId(userID)})["_id"]
+        else:
+            return False
     
     def getPasswordProtectedNotes(self, userID):
         passwordProtectedNotes = []
