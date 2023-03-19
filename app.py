@@ -271,5 +271,25 @@ def deleteProfile():
     else:
         return login()
 
+@app.route('/userDeleteNote', methods=['POST', 'GET'])
+def userDeleteNote():
+    if 'logged_in' in session:
+        if ObjectId.is_valid(request.form['noteID']):
+            if Database.getNoteCreator(request.form['noteID']) != None:
+                if Database.getNoteCreator(request.form['noteID']) == Database.getUserID(session['username']):
+                    if Database.deleteNote({"_id": ObjectId(request.form['noteID'])}):
+                        return render_template('manageProfile.html', message="Successfully deleted note")
+                    else:
+                        return render_template('manageProfile.html', message="Error deleting note")
+                else:
+                    return render_template('manageProfile.html', message="You do not have permission to delete this note")
+            else:
+                return render_template('manageProfile.html', message="Note does not exist")
+        else:
+            return render_template('manageProfile.html', message="Not a valid note ID")
+    else:
+        return render_template('login.html')
+    
+
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)
