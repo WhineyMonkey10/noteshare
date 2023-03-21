@@ -341,7 +341,7 @@ def webhook():
     # Handle the event
     if event.type == 'payment_intent.succeeded':
         payment_intent = event.data.object
-        return render_template('paymentComplete.html')
+        return url_for('dashboard')
     elif event.type == 'payment_method.attached':
         payment_method = event.data.object
         print('PaymentMethod was attached to a Customer!')
