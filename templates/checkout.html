@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Checkout</title>
+</head>
+<body>
+    <h1>Upgrade to Noteshare Pro</h1>
+    <p>Noteshare Pro gives you access to all of our premium features, including:</p>
+    <ul>
+        <li>Unlimited notes</li>
+        <li>Unlimited tags</li>
+        <li>Unlimited notebooks</li>
+        <li>Unlimited collaborators</li>
+        <li>Unlimited storage</li>
+        <li>Priority support</li>
+        <li>Free, no-login shortened links (only for accessing information)</li>
+    </ul>
+
+
+    <button id="buynowbutton">Buy Now!</button>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const checkout_public_key = '{{checkout_public_key}}';
+        const checkout_session_id = '{{checkout_session_id}}';
+    </script>
+    <script src="{{ url_for('static', filename='stripe-no-ajax.js') }}"></script>
+</body>
+</html>
