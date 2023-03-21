@@ -1,0 +1,6 @@
+{
+    "secretStripeKey": "sk_test_51MnIJzJUJoKBN9MhrOxWITSo89SHuxcL7i1xZb5mH2J4Dv4bqYkBnS86xenQVu429nqwrvl3ifwsYuNyEde7Gssd00W4QJffgv",
+    "stripePriceID": "price_1MnRUQJUJoKBN9MhOIsGPXXM",
+    "publishStripeKey": "pk_test_51MnIJzJUJoKBN9MhDrm7jgdCOXmoU3LwlYUzvxpTvG3IKVvZ9W4KQW8tX5b3RUWPSZ8hqTtCSOQRGryxSQvVFMtF00jExS6Qvq",
+    "stripeEndpointSecret": "whsec_57a94e16d5adfb158cfcb3d79be09cc8cd53ab06f9a4eb527b999c418a757596"
+}
