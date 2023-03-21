@@ -4,7 +4,6 @@ import json
 from bson.objectid import ObjectId
 from waitress import serve
 import stripe
-import jsonify
 Database = Database()
 
 
@@ -324,32 +323,33 @@ def purchase():
     else:
         return render_template('login.html')
 
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    payload = request.get_data()
     event = None
-    payload = request.data
-    sig_header = request.headers['STRIPE_SIGNATURE']
 
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
+        event_data = json.loads(payload.decode("utf-8"))
+        event = stripe.Event.construct_from(
+          event_data, stripe.api_key
         )
     except ValueError as e:
         # Invalid payload
-        raise e
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
-        raise e
+        return '', 400
 
     # Handle the event
-    if event['type'] == 'payment_intent.succeeded':
-      payment_intent = event['data']['object']
-      return url_for('dashboard')
-    # ... handle other event types
+    if event.type == 'payment_intent.succeeded':
+        payment_intent = event.data.object
+        return render_template('paymentComplete.html')
+    elif event.type == 'payment_method.attached':
+        payment_method = event.data.object
+        print('PaymentMethod was attached to a Customer!')
     else:
-      print('Unhandled event type {}'.format(event['type']))
+        print('Unhandled event type {}'.format(event.type))
 
     return jsonify(success=True)
+
 
     
 if __name__ == '__main__':
