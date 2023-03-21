@@ -302,7 +302,6 @@ def userDeleteNote():
 @app.route('/thanks', methods=['POST', 'GET'])
 def thanks():
     if 'logged_in' in session:
-        
         return render_template('paymentComplete.html')
     else:
         return render_template('login.html')
@@ -325,18 +324,11 @@ def purchase():
     else:
         return render_template('login.html')
 
-@app.route('/stripe_webhook', methods=['POST'])
-def stripe_webhook():
-    print('WEBHOOK CALLED')
-
-    if request.content_length > 1024 * 1024:
-        print('REQUEST TOO BIG')
-        abort(400)
-    payload = request.get_data()
-    sig_header = request.environ.get('HTTP_STRIPE_SIGNATURE')
-    endpoint_secret = endpoint_secret
+@app.route('/webhook', methods=['POST'])
+def webhook():
     event = None
-
+    payload = request.data
+    sig_header = request.headers['STRIPE_SIGNATURE']
 
     try:
         event = stripe.Webhook.construct_event(
@@ -344,21 +336,20 @@ def stripe_webhook():
         )
     except ValueError as e:
         # Invalid payload
-        print('INVALID PAYLOAD')
-        return {}, 400
+        raise e
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
-        print('INVALID SIGNATURE')
-        return {}, 400
+        raise e
 
-    # Handle the checkout.session.completed event
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        print(session)
-        line_items = stripe.checkout.Session.list_line_items(session['id'], limit=1)
-        print(line_items['data'][0]['description'])
+    # Handle the event
+    if event['type'] == 'payment_intent.succeeded':
+      payment_intent = event['data']['object']
+      return url_for('dashboard')
+    # ... handle other event types
+    else:
+      print('Unhandled event type {}'.format(event['type']))
 
-    return {}
+    return jsonify(success=True)
 
     
 if __name__ == '__main__':
