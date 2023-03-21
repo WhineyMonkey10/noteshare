@@ -337,6 +337,7 @@ def stripe_webhook():
     endpoint_secret = endpoint_secret
     event = None
 
+
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
