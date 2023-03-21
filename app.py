@@ -1,14 +1,23 @@
 from src.Database.database import Database
-from flask import Flask, request, render_template, session, redirect, url_for
+from flask import Flask, request, render_template, session, redirect, url_for, abort, jsonify
 import json
 from bson.objectid import ObjectId
 from waitress import serve
+import stripe
+import jsonify
 Database = Database()
 
 
 app = Flask(__name__)
 config = json.load(open('src/Database/config.json'))
+staticConfig = json.load(open('static/config.json'))
 app.secret_key = config['secretKey']
+app.config['STRIPE_SECRET_KEY'] = staticConfig['secretStripeKey']
+app.config['STRIPE_PUBLIC_KEY'] = staticConfig['publishStripeKey']
+stripe.api_key = app.config['STRIPE_SECRET_KEY']
+stripePriceID = staticConfig['stripePriceID']
+endpoint_secret = staticConfig['stripeEndpointSecret']
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -289,7 +298,67 @@ def userDeleteNote():
             return render_template('manageProfile.html', message="Not a valid note ID")
     else:
         return render_template('login.html')
-    
 
+@app.route('/thanks', methods=['POST', 'GET'])
+def thanks():
+    if 'logged_in' in session:
+        
+        return render_template('paymentComplete.html')
+    else:
+        return render_template('login.html')
+    
+    
+@app.route('/purchase', methods=['POST', 'GET'])
+def purchase():
+    if 'logged_in' in session:
+        stripeSession = stripe.checkout.Session.create(
+            line_items=[{
+                'price': stripePriceID,
+                'quantity': 1,
+            
+            }],
+          mode='payment',
+          success_url=url_for('thanks', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+          cancel_url=url_for('dashboard', _external=True),
+          )
+        return render_template('checkout.html', checkout_session_id=stripeSession['id'], checkout_public_key=app.config['STRIPE_PUBLIC_KEY'])
+    else:
+        return render_template('login.html')
+
+@app.route('/stripe_webhook', methods=['POST'])
+def stripe_webhook():
+    print('WEBHOOK CALLED')
+
+    if request.content_length > 1024 * 1024:
+        print('REQUEST TOO BIG')
+        abort(400)
+    payload = request.get_data()
+    sig_header = request.environ.get('HTTP_STRIPE_SIGNATURE')
+    endpoint_secret = endpoint_secret
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        print('INVALID PAYLOAD')
+        return {}, 400
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        print('INVALID SIGNATURE')
+        return {}, 400
+
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        print(session)
+        line_items = stripe.checkout.Session.list_line_items(session['id'], limit=1)
+        print(line_items['data'][0]['description'])
+
+    return {}
+
+    
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)

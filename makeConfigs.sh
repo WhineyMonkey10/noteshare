@@ -74,6 +74,37 @@ else
         fi
     fi
 
+    echo "Stripe Details"
+    echo "Please enter the Stripe publishable key"
+    if [ -z "${10}" ]; then
+        read -p "Stripe Publishable Key: " stripeKeyPublishable
+    else
+        stripeKey=${10}
+    fi
+
+    echo"Please enter the Stripe secret key"
+    if [ -z "${11}" ]; then
+        read -p "Stripe Secret Key: " stripeKeySecret
+    else
+        stripeKey=${11}
+    fi
+
+    echo"Please enter the Stripe price ID"
+    if [ -z "${12}" ]; then
+        read -p "Stripe Price ID: " stripePriceID
+    else
+        stripePriceID=${12}
+    fi
+
+    echo"Please enter the Stripe endpoint secret for the webhook"
+    echo"Please enter the Stripe price ID"
+    if [ -z "${13}" ]; then
+        read -p "Stripe E.P: " stripeEP
+    else
+        stripePriceID=${13}
+    fi
+    
+
     // write the config file in JSON format
     echo "{
         \"uri\": \"$uri\",
@@ -83,6 +114,13 @@ else
         \"password\": \"$password\",
         \"userCollection\": \"$userCollection\",
         \"secretKey\": \"$secretKey\",
-        \"encryptionKey\": \"$encryptionKey\"
+        \"encryptionKey\": \"$encryptionKey\",
     }" > src/Database/config.json
 fi
+
+echo "{
+        \"publishStripeKey\": \"$stripeKeyPublishable\",
+        \"secretStripeKey\": \"$stripeKeySecret\",
+        \"stripePriceID\": \"$stripePriceID\",
+        \"stripeEndpointSecret\": \"$stripeEP\",
+ }" > static/config.json
