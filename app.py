@@ -310,11 +310,14 @@ def thanks():
 def purchase():
     if 'logged_in' in session:
         stripeSession = stripe.checkout.Session.create(
+            payment_intent_data={
+                  "metadata": {"username": session['username']}
+                },
             line_items=[{
                 'price': stripePriceID,
                 'quantity': 1,
-            
             }],
+
           mode='payment',
           success_url=url_for('thanks', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
           cancel_url=url_for('dashboard', _external=True),
@@ -341,6 +344,11 @@ def webhook():
     # Handle the event
     if event.type == 'payment_intent.succeeded':
         payment_intent = event.data.object
+        # Get the username from the payment intent metadata
+        metadata = payment_intent.metadata
+        username = metadata['username']
+        Database.setPro(username)
+
     elif event.type == 'payment_method.attached':
         payment_method = event.data.object
         print('PaymentMethod was attached to a Customer!')
