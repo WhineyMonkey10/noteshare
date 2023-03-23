@@ -247,6 +247,7 @@ class Database:
 
     def checkNoteOwnerProStatus(self, noteID):
         userID = self.getNoteCreator(noteID)
+        
         if users.find_one({"_id": ObjectId(userID)}):
             if "pro" in users.find_one({"_id": ObjectId(userID)}) and users.find_one({"_id": ObjectId(userID)})["pro"] == True:
                 return True
