@@ -42,13 +42,17 @@ def login():
 @app.route('/privateNotes', methods=['POST', 'GET'])
 def privateNotes(id, noteCreator, noteID):
     if 'logged_in' in session:
-        if id == noteCreator:
-            note = Database.getNoteById(noteID)
-            title = note['title']
-            content = note['content']
-            creator = note['userID']
-            return render_template('note.html', noteTitle=title, noteContent=content, noteID=id, userID=creator)
-        return render_template('alertMessage.html', message='You do not have access to this note.')
+        if 'logged_in' not in session:
+            return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
+        else:
+            if id == noteCreator:
+                note = Database.getNoteById(noteID)
+                title = note['title']
+                content = note['content']
+                creator = Database.getNoteCreator(noteID)
+                id = note['_id']
+                return render_template('note.html', noteTitle=title, noteContent=content, noteID=id, userID=creator)
+            return render_template('alertMessage.html', message='You do not have access to this note.')
     else:
         return login()
 
@@ -73,10 +77,13 @@ def note(id):
             return render_template('protectednote.html', noteID=noteID)
         private = Database.getNoteById(id);private = private['private']
         if private == "True":
-            return privateNotes(Database.getUserID(session['username']), noteCreator, noteID)
+            if 'logged_in' not in session:
+                return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
+            else:
+                return privateNotes(Database.getUserID(session['username']), noteCreator, noteID)
         
         return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
-    
+        
     if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
         return loadNote(id)
     elif Database.checkNoteOwnerProStatus(id) == True and 'logged_in' in session:
@@ -99,8 +106,12 @@ def accessProtectedNote(id):
             private = Database.getNoteById(id);private = private['private']
 
             if protected == "True" and private == "True":
-                if Database.getNoteCreator(noteID) != Database.getUserID(session['username']):
-                    return render_template('alertMessage.html', message='You do not have access to this note.')
+                if 'logged_in' not in session:
+                    return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
+                else:
+                    noteCreator = Database.getNoteCreator(noteID)
+                    if Database.getNoteCreator(noteID) != Database.getUserID(session['username']):
+                        return render_template('alertMessage.html', message='You do not have access to this note.')
                 if password == Database.getNoteById(id)['password']:
                     return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID), noteID)
             if protected == "True":
@@ -109,8 +120,6 @@ def accessProtectedNote(id):
                     return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
                 else:
                     return render_template('protectednote.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
-            if private == "True":
-                return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID))
         else:
             return render_template('login.html')
     
