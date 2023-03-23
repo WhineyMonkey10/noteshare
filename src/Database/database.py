@@ -222,3 +222,11 @@ class Database:
                 users.update_one({"_id": ObjectId(userID)}, {"$set": {"pro": True}})
             else:
                 users.update_one({"_id": ObjectId(userID)}, {"$set": {"pro": True}})
+    
+    def removePro(self, username):
+        userID = self.getUserID(username)
+        if users.find_one({"_id": ObjectId(userID)}):
+            if "pro" in users.find_one({"_id": ObjectId(userID)}):
+                users.update_one({"_id": ObjectId(userID)}, {"$set": {"pro": False}})
+            else:
+                users.update_one({"_id": ObjectId(userID)}, {"$set": {"pro": False}})
