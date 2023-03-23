@@ -230,3 +230,25 @@ class Database:
                 users.update_one({"_id": ObjectId(userID)}, {"$set": {"pro": False}})
             else:
                 users.update_one({"_id": ObjectId(userID)}, {"$set": {"pro": False}})
+                
+    def checkPro(self, username):
+        userID = self.getUserID(username)
+        if users.find_one({"_id": ObjectId(userID)}):
+            if "pro" in users.find_one({"_id": ObjectId(userID)}) and users.find_one({"_id": ObjectId(userID)})["pro"] == True:
+                return True
+            else:
+                return False
+            
+    def getUsernameFromID(self, userID):
+        if users.find_one({"_id": ObjectId(userID)}):
+            return users.find_one({"_id": ObjectId(userID)})["username"]
+        else:
+            return False
+
+    def checkNoteOwnerProStatus(self, noteID):
+        userID = self.getNoteCreator(noteID)
+        if users.find_one({"_id": ObjectId(userID)}):
+            if "pro" in users.find_one({"_id": ObjectId(userID)}) and users.find_one({"_id": ObjectId(userID)})["pro"] == True:
+                return True
+            else:
+                return False

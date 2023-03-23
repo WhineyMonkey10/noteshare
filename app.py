@@ -62,7 +62,8 @@ def index():
 
 @app.route('/note/<id>')
 def note(id):
-    if 'logged_in' in session:
+    
+    def loadNote(id):
         noteTitle = Database.getNoteById(id);noteTitle = noteTitle['title']
         noteContent = Database.getNoteById(id);noteContent = noteContent['content']
         noteID = Database.getNoteById(id);noteID = noteID['_id']
@@ -75,8 +76,16 @@ def note(id):
             return privateNotes(Database.getUserID(session['username']), noteCreator, noteID)
         
         return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
+    
+    if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
+        return loadNote(id)
+    elif Database.checkNoteOwnerProStatus(id) == True and 'logged_in' in session:
+        return loadNote(id)
     else:
-        return render_template('login.html')
+        if 'logged_in' in session:
+            return loadNote(id)
+        else:
+            return render_template('login.html')
 
 @app.route('/accessProtectedNote/<id>', methods=['POST', 'GET'])
 def accessProtectedNote(id):
@@ -213,7 +222,7 @@ def manageNotes():
 @app.route('/', methods=['POST', 'GET'])
 def dashboard():
     if 'logged_in' in session:
-        return render_template('dashboard.html', username=session['username'], userID=Database.getUserID(session['username']), total=Database.getStatistics(Database.getUserID(session['username']), 'total'), public=Database.getStatistics(Database.getUserID(session['username']), 'public'), private=Database.getStatistics(Database.getUserID(session['username']), 'private'), passwordProtected=Database.getStatistics(Database.getUserID(session['username']), 'password'))
+        return render_template('dashboard.html', username=session['username'], userID=Database.getUserID(session['username']), total=Database.getStatistics(Database.getUserID(session['username']), 'total'), public=Database.getStatistics(Database.getUserID(session['username']), 'public'), private=Database.getStatistics(Database.getUserID(session['username']), 'private'), passwordProtected=Database.getStatistics(Database.getUserID(session['username']), 'password'), userHasPro=Database.checkPro(session['username']))
     else:
         return render_template('login.html')
 
@@ -319,8 +328,8 @@ def purchase():
             }],
 
           mode='payment',
-          success_url=url_for('thanks', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
-          cancel_url=url_for('dashboard', _external=True),
+          success_url=url_for('dashboard', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+          cancel_url=url_for('purchase', _external=True),
           )
         return render_template('checkout.html', checkout_session_id=stripeSession['id'], checkout_public_key=app.config['STRIPE_PUBLIC_KEY'])
     else:
