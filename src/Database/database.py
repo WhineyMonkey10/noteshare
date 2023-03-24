@@ -33,6 +33,28 @@ class Database:
         elif private == "False":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"publicNoteCount": 1}})
             
+    def insertCustomIDNote(self, title, content, userID, private, id):
+        if collection.find_one({"_id": id}):
+            print(collection.find_one({"_id": id}))
+            return False
+        else:
+            self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "_id": id})
+            if private == "True":
+                users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
+            elif private == "False":
+                users.update_one({"_id": ObjectId(userID)}, {"$inc": {"publicNoteCount": 1}})
+    
+    def insertCustomIDNoteWithPassword(self, title, content, password, userID, private, id):
+        if collection.find_one({"_id": id}):
+            print(collection.find_one({"_id": id}))
+
+            return False
+        else:
+            self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "_id": id})
+            if private == "True":
+                users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
+            elif private == "False":
+                users.update_one({"_id": ObjectId(userID)}, {"$inc": {"passwordNoteCount": 1}})
         
         
     def insertNoteWithPassword(self, title, content, password, userID, private):
