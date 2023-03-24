@@ -163,71 +163,58 @@ def accessProtectedNote(id):
 def addNote():
     if 'logged_in' in session:
         if request.method == 'POST':
+            
             title = request.form['title']
             content = request.form['content']
-            if request.form.get('isPrivate') is not None and request.form.get('isPublic') is not None:
-                password = request.form['password']
-                if password == '':
-                    return render_template('alertMessage.html', message='You must enter a password if you want to make your note password protected.')
-                else:
-                    if Database.checkPro(session['username']):
-                        if request.form.get('customIDCheck') is not None:
-                            customId = request.form['customID']
-                            if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True", customId):
-                                return index()
-                            else:
-                                return render_template('alertMessage.html', message='A note with that ID already exists.')
-                        else:
-                            Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True")
-                    else:
-                        Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True")
             
-            elif request.form.get('isPrivate') is not None:
-                if Database.checkPro(session['username']):
-                    if request.form.get('customIDCheck') is not None:
-                        customId = request.form['customID']
-                        if Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "True", customId):
-                            return index()
-                        else:
-                            return render_template('alertMessage.html', message='A note with that ID already exists.')
-                    else:
-                        Database.insertNote(title, content, Database.getUserID(session['username']), "True")
-                else:
-                    Database.insertNote(title, content, Database.getUserID(session['username']), "True")
-                
-            elif request.form.get('isPublic') is not None:
+            if request.form.get('isPublic') is not None:
+                passwordProt = True
                 password = request.form['password']
-                if password == '':
-                    return render_template('alertMessage.html', message='You must enter a password if you want to make your note password protected.')
-                if Database.checkPro(session['username']):
-                    if request.form.get('customIDCheck') is not None:
-                        customId = request.form['customID']
-                        if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", customId):
-                            return index()
-                        else:
-                            return render_template('alertMessage.html', message='A note with that ID already exists.')
-                    else:
-                        Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
-                else:
-                    Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
-                
             else:
-                if Database.checkPro(session['username']):
-                    if request.form.get('customIDCheck') is not None:
-                        customId = request.form['customID']
-                        if Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "False", customId):
-                            return index()
-                        else:
-                            return render_template('alertMessage.html', message='A note with that ID already exists.')
-                    else:
-                        Database.insertNote(title, content, Database.getUserID(session['username']), "False")
+                passwordProt = False
+            
+            if request.form.get('isPrivate') is not None:
+                private = True
+            else:
+                private = False
+        
+            if request.form.get('customIDCheck') is not None:
+                customID = True
+                customIDValue = request.form['customID']
+            else:
+                customID = False
+                customIDValue = None
+                
+            if customID:
+                if passwordProt and private:
+                    Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True", customIDValue)
+                    return url_for('dashboard')
+                if passwordProt:
+                    Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", customIDValue)
+                    return url_for('dashboard')
+                if private:
+                    Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "True", customIDValue)
+                    return url_for('dashboard')
+                else:
+                    Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "False", customIDValue) 
+                    return url_for('dashboard')
+            else:
+                if passwordProt and private:
+                    Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True")
+                    return url_for('dashboard')
+                if passwordProt:
+                    Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
+                    return url_for('dashboard')
+                if private:
+                    Database.insertNote(title, content, Database.getUserID(session['username']), "True")
+                    return url_for('dashboard')
                 else:
                     Database.insertNote(title, content, Database.getUserID(session['username']), "False")
-            
-            return index()
-        return render_template('addnote.html', pro=Database.checkPro(session['username']))
+                    return url_for('dashboard')
     else:
         return render_template('login.html')
+    
+    return render_template('addNote.html', pro=Database.checkPro(Database.getUserID(session['username'])))
 
 
 @app.route('/logout', methods=['POST', 'GET'])
