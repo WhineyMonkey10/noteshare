@@ -30,31 +30,36 @@ class Database:
         self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private})
         if private == "True":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
+            return True
         elif private == "False":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"publicNoteCount": 1}})
+            return True
             
     def insertCustomIDNote(self, title, content, userID, private, id):
-        if collection.find_one({"_id": id}):
-            print(collection.find_one({"_id": id}))
+        if collection.find_one({"customID": id}):
+            print("Custom ID already exists")
             return False
         else:
-            self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "_id": id})
+            self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "CustomID": id})
             if private == "True":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
+                return True
             elif private == "False":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"publicNoteCount": 1}})
+                return True
     
     def insertCustomIDNoteWithPassword(self, title, content, password, userID, private, id):
-        if collection.find_one({"_id": id}):
-            print(collection.find_one({"_id": id}))
-
+        if collection.find_one({"customID": id}):
+            print("Custom ID already exists")
             return False
         else:
-            self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "_id": id})
+            self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "CustomID": id})
             if private == "True":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
+                return True
             elif private == "False":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"passwordNoteCount": 1}})
+                return True
         
         
     def insertNoteWithPassword(self, title, content, password, userID, private):
@@ -64,7 +69,7 @@ class Database:
         elif private == "False":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"passwordNoteCount": 1}})
     def getNotes(self):
-        publicNotes = self.collection.find({"private": "False"})
+        publicNotes = self.collection.find({"private": "False", "CustomID": {"$exists": False}})
         return publicNotes
     
     def deleteNotes(self):
@@ -81,7 +86,10 @@ class Database:
         self.collection.update_one(_id, {"$set": newNote})
         
     def getNoteById(self, id):
-        return self.collection.find_one({"_id": ObjectId(id)})
+        if 'CustomID' in self.collection.find_one({"_id": ObjectId(id)}):
+            return self.collection.find_one({"CustomID": id})
+        else:
+            return self.collection.find_one({"_id": ObjectId(id)})
     
     def getNoteByTitle(self, title):
         return self.collection.find_one({"title": title})
@@ -161,11 +169,16 @@ class Database:
         return privateNotes
     
     def getNoteCreator(self, noteID):
-        if self.collection.find_one({"_id": ObjectId(noteID)}):
-            userID = self.collection.find_one({"_id": ObjectId(noteID)})["userID"]
-            return users.find_one({"_id": ObjectId(userID)})["_id"]
+        if self.collection.find_one({"CustomID": noteID}):
+            if self.collection.find_one({"CustomID": noteID}):
+                userID = self.collection.find_one({"CustomID": noteID})["userID"]
+                return users.find_one({"_id": ObjectId(userID)})["_id"]
         else:
-            return False
+            if self.collection.find_one({"_id": ObjectId(noteID)}):
+                userID = self.collection.find_one({"_id": ObjectId(noteID)})["userID"]
+                return users.find_one({"_id": ObjectId(userID)})["_id"]
+            else:
+                return False
     
     def getPasswordProtectedNotes(self, userID):
         passwordProtectedNotes = []
@@ -275,3 +288,24 @@ class Database:
                 return True
             else:
                 return False
+            
+    def checkNoteCustomID(self, customID):
+        if self.collection.find_one({"CustomID": customID}):
+            return True
+        else:
+            return False
+    
+    def getNoteByCustomID(self, customID):
+        if self.collection.find_one({"CustomID": customID}):
+            return self.collection.find_one({"CustomID": customID})
+        else:
+            return False
+        
+    def getCustomNotes(self):
+        return self.collection.find({"CustomID": {"$exists": True}, "private": "False"})
+    
+    def getCustomIDByNoteID(self, noteID):
+        if self.collection.find_one({"_id": ObjectId(noteID)}) != None:
+            return self.collection.find_one({"_id": ObjectId(noteID)})["CustomID"]
+        else:
+            return False
