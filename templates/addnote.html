@@ -34,6 +34,15 @@
         
         <label for="content">Content</label>
         <textarea name="content" id="content" cols="30" rows="10" required></textarea>
+
+        {% if pro %}
+        <div class="form-group">
+            <input class="form-checkbox" type="checkbox" name="customIDCheck" id="customIDCheck">
+            <label for="customID" class="form-checkbox-label">Custom ID</label>
+            <input type="text" name="customID" id="customID" placeholder="Custom Note ID">
+        </div>
+        {% endif %}
+
         
         <div class="form-group">
             <input class="form-checkbox" type="checkbox" name="isPublic" id="isPublic">
