@@ -21,6 +21,12 @@
                     <a href="{{ url_for('note', id=note._id) }}">{{ note.title }}</a>
                 </li>
             {% endfor %}
+
+            {% for note in customIdNotes %}
+                <li>
+                    <a href="{{ url_for('note', id=note.CustomID) }}">{{ note.title }}</a>
+                </li>
+            {% endfor %}
         </ul>
         <div class="button-container">
             <a href="{{ url_for('logout') }}" class="button">Logout</a>
