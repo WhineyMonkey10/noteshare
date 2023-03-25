@@ -68,38 +68,7 @@ def index():
 @app.route('/note/<id>')
 def note(id):
     
-    def loadNote(id):
-        if Database.checkNoteCustomID(id) == False:
-            noteTitle = Database.getNoteById(id);noteTitle = noteTitle['title']
-            noteContent = Database.getNoteById(id);noteContent = noteContent['content']
-            noteID = Database.getNoteById(id);noteID = noteID['_id']
-            protected = Database.getNoteById(id);protected = protected['protected']
-            noteCreator = Database.getNoteCreator(noteID)
-            if protected:
-                return render_template('protectednote.html', noteID=noteID)
-            private = Database.getNoteById(id);private = private['private']
-            if private:
-                if 'logged_in' not in session:
-                    return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
-                else:
-                    return privateNotes(Database.getUserID(session['username']), noteCreator, noteID)
-
-            return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
-        else:
-            noteTitle = Database.getNoteByCustomID(id);noteTitle = noteTitle['title']
-            noteContent = Database.getNoteByCustomID(id);noteContent = noteContent['content']
-            noteID = Database.getNoteByCustomID(id);noteID = noteID['_id']
-            protected = Database.getNoteByCustomID(id);protected = protected['protected']
-            noteCreator = Database.getNoteCreator(noteID)
-            if protected:
-                return render_template('protectednote.html', noteID=noteID)
-            private = Database.getNoteByCustomID(id);private = private['private']
-            if private:
-                if 'logged_in' not in session:
-                    return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
-                else:
-                    return privateNotes(Database.getUserID(session['username']), noteCreator, noteID)
-            return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
+    
         
     if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
         return loadNote(id)
