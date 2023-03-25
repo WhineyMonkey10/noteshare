@@ -188,33 +188,26 @@ def addNote():
             if customID:
                 if passwordProt and private:
                     Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True", customIDValue)
-                    return url_for('dashboard')
                 if passwordProt:
                     Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", customIDValue)
-                    return url_for('dashboard')
                 if private:
                     Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "True", customIDValue)
-                    return url_for('dashboard')
                 else:
                     Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "False", customIDValue) 
-                    return url_for('dashboard')
             else:
                 if passwordProt and private:
                     Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True")
-                    return url_for('dashboard')
                 if passwordProt:
                     Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
-                    return url_for('dashboard')
                 if private:
                     Database.insertNote(title, content, Database.getUserID(session['username']), "True")
-                    return url_for('dashboard')
                 else:
                     Database.insertNote(title, content, Database.getUserID(session['username']), "False")
-                    return url_for('dashboard')
+            return index()
     else:
         return render_template('login.html')
-    
-    return render_template('addNote.html', pro=Database.checkPro(Database.getUserID(session['username'])))
+     
+    return render_template('addNote.html', pro=Database.checkPro(session['username']))
 
 
 @app.route('/logout', methods=['POST', 'GET'])
