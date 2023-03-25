@@ -86,11 +86,12 @@ class Database:
         self.collection.update_one(_id, {"$set": newNote})
         
     def getNoteById(self, id):
-        if 'CustomID' in self.collection.find_one({"_id": ObjectId(id)}):
+        try:
+            if self.collection.find_one({"_id": ObjectId(id)}):
+                return self.collection.find_one({"_id": ObjectId(id)})
+            
+        except:
             return self.collection.find_one({"CustomID": id})
-        else:
-            return self.collection.find_one({"_id": ObjectId(id)})
-    
     def getNoteByTitle(self, title):
         return self.collection.find_one({"title": title})
     
