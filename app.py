@@ -75,7 +75,8 @@ def note(id):
         else:
             note = Database.getNoteByCustomID(id)
             customID = True
-            
+        
+        
         title = note['title']
         content = note['content']
         if customID == False:
@@ -115,21 +116,26 @@ def note(id):
 def accessProtectedNote(id):
     def loadNote(id):
         if request.method == 'POST':
-            if Database.checkNoteCustomID(id) == False:
-                password = request.form['protPass']
-                noteTitle = Database.getNoteById(id);noteTitle = noteTitle['title']
-                noteContent = Database.getNoteById(id);noteContent = noteContent['content']
-                noteID = Database.getNoteById(id);noteID = noteID['_id']
-                protected = Database.getNoteById(id);protected = protected['protected']
-                private = Database.getNoteById(id);private = private['private']
+            if Database.getCustomIDByNoteID(id) == False:
+                note = Database.getNoteById(id)
+                customID = False
             else:
-                noteTitle = Database.getNoteByCustomID(id);noteTitle = noteTitle['title']
-                noteContent = Database.getNoteByCustomID(id);noteContent = noteContent['content']
-                noteID = Database.getNoteByCustomID(id);noteID = noteID['_id']
-                protected = Database.getNoteByCustomID(id);protected = protected['protected']
-                noteCreator = Database.getNoteCreator(noteID)
-                private = Database.getNoteByCustomID(id);private = private['private']
-                password = request.form['protPass']
+                note = Database.getNoteByCustomID(id)
+                customID = True
+        
+        
+            noteTitle = note['title']
+            noteContent = note['content']
+            if customID == False:
+                creator = Database.getNoteCreator(id)
+                noteID = note['_id']
+            else:
+                creator = Database.getNoteCreator(note['_id'])
+                noteID = id
+            
+            protected = note['protected']
+            private = note['private']
+            password = request.form['protPass']
 
             if protected == "True" and private == "True":
                 if 'logged_in' not in session:
@@ -173,6 +179,8 @@ def addNote():
                     if Database.checkPro(session['username']):
                         if request.form.get('customIDCheck') is not None:
                             customId = request.form['customID']
+                            if customId == '':
+                                return render_template('alertMessage.html', message='You must enter a custom ID if you want to make your note have a custom ID.')
                             if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True", customId):
                                 return index()
                             else:
@@ -186,6 +194,8 @@ def addNote():
                 if Database.checkPro(session['username']):
                     if request.form.get('customIDCheck') is not None:
                         customId = request.form['customID']
+                        if customId == '':
+                            return render_template('alertMessage.html', message='You must enter a custom ID if you want to make your note have a custom ID.')
                         if Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "True", customId):
                             return index()
                         else:
@@ -202,6 +212,8 @@ def addNote():
                 if Database.checkPro(session['username']):
                     if request.form.get('customIDCheck') is not None:
                         customId = request.form['customID']
+                        if customId == '':
+                            return render_template('alertMessage.html', message='You must enter a custom ID if you want to make your note have a custom ID.')
                         if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", customId):
                             return index()
                         else:
@@ -215,6 +227,8 @@ def addNote():
                 if Database.checkPro(session['username']):
                     if request.form.get('customIDCheck') is not None:
                         customId = request.form['customID']
+                        if customId == '':
+                            return render_template('alertMessage.html', message='You must enter a custom ID if you want to make your note have a custom ID.')
                         if Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "False", customId):
                             return index()
                         else:
@@ -321,7 +335,8 @@ def privateNoteList(userID):
     if 'logged_in' in session:
         userID = Database.getUserID(session['username'])
         note = Database.getPrivateNotes(userID)
-        return render_template('privatenotes.html', notes = note, userID=Database.getUserID(session['username']))
+        customIdNotes = Database.getPrivateNotesWithCustomID(userID)
+        return render_template('privatenotes.html', notes = note, userID=Database.getUserID(session['username']), customIdNotes=customIdNotes)
     else:
         return render_template('login.html')
 

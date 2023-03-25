@@ -165,9 +165,16 @@ class Database:
     def getPrivateNotes(self, userID):
         privateNotes = []
         for note in self.collection.find({"userID": userID}):
-            if note["private"] == "True":
+            if note["private"] == "True" and "CustomID" not in note:
                 privateNotes.append(note)
         return privateNotes
+
+    def getPrivateNotesWithCustomID(self, userID):
+        notes = []
+        for note in self.collection.find({"userID": userID}):
+            if note["private"] == "True" and "CustomID" in note:
+                notes.append(note)
+        return notes
     
     def getNoteCreator(self, noteID):
         if self.collection.find_one({"CustomID": noteID}):
