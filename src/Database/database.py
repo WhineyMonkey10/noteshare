@@ -305,7 +305,10 @@ class Database:
         return self.collection.find({"CustomID": {"$exists": True}, "private": "False"})
     
     def getCustomIDByNoteID(self, noteID):
-        if self.collection.find_one({"_id": ObjectId(noteID)}) != None:
-            return self.collection.find_one({"_id": ObjectId(noteID)})["CustomID"]
-        else:
+        try:
+            if self.collection.find_one({"_id": ObjectId(noteID)}) != None:
+                return self.collection.find_one({"_id": ObjectId(noteID)})["CustomID"]
+            else:
+                return False
+        except:
             return False
