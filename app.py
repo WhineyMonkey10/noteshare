@@ -51,6 +51,8 @@ def privateNotes(id, noteCreator, noteID):
                 content = note['content']
                 creator = Database.getNoteCreator(noteID)
                 id = note['_id']
+                if 'CustomID' in note:
+                    id = note['CustomID']
                 return render_template('note.html', noteTitle=title, noteContent=content, noteID=id, userID=creator)
             return render_template('alertMessage.html', message='You do not have access to this note.')
     else:
@@ -69,11 +71,11 @@ def index():
 def note(id):
     
     def loadNote(id):
-        if Database.getCustomIDByNoteID(id) == False:
+        if Database.getNoteContentByCustomID(id) == False:
             note = Database.getNoteById(id)
             customID = False
         else:
-            note = Database.getNoteByCustomID(id)
+            note = Database.getNoteContentByCustomID(id)
             customID = True
         
         
@@ -116,11 +118,11 @@ def note(id):
 def accessProtectedNote(id):
     def loadNote(id):
         if request.method == 'POST':
-            if Database.getCustomIDByNoteID(id) == False:
+            if Database.getNoteContentByCustomID(id) == False:
                 note = Database.getNoteById(id)
                 customID = False
             else:
-                note = Database.getNoteByCustomID(id)
+                note = Database.getNoteContentByCustomID(id)
                 customID = True
         
         
