@@ -344,8 +344,8 @@ def privateNoteList(userID):
 def passwordProtectedNoteList(userID):
     if 'logged_in' in session:
         userID = Database.getUserID(session['username'])
-        note = Database.getPasswordProtectedNotes(userID)
-        return render_template('passwordProtectedNoteList.html', notes = note, userID=Database.getUserID(session['username']))
+        norma_notes = Database.getPasswordProtectedNotes(userID)
+        return render_template('passwordProtectedNoteList.html', notes = norma_notes, userID=Database.getUserID(session['username']), customIdNotes=Database.getPasswordProtectedNotesWithCustomID(userID))
     else:
         return render_template('login.html')
 
