@@ -300,6 +300,12 @@ def manageUser():
         if request.form.get('changePasswordCheck') is not None:
             newPassword = request.form['changePassword']
             Database.changePassword(user, newPassword)
+        if request.form.get('togglePro') is not None:
+            if Database.checkPro(user):
+                Database.removePro(user)
+            else:
+                Database.setPro(user)
+        
         return redirect(url_for('admin'))
     else:
         return render_template('login.html')
