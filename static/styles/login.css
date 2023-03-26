@@ -9,7 +9,6 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  outline: #fff;
 }
 
 .login-form {
@@ -40,20 +39,20 @@ body {
 .login-form input[type="text"]:focus,
 .login-form input[type="password"]:focus,
 .login-form input[type="submit"]:focus {
-  outline: #fff;
   box-shadow: 0 0 2px #4285f4;
 }
 
 .login-form input[type="submit"] {
   background-color: #4285f4;
-  color: #fff;
+  margin: 0 auto;
+  display: block;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  outline: none;
 }
 
 .login-form input[type="submit"]:hover {
   background-color: #3d7ee7;
-  outline: #fff;
 }
 
 .register-link-container {
@@ -75,4 +74,3 @@ body {
 .register-link:hover {
   background-color: #3d7ee7;
 }
-
