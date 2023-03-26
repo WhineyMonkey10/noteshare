@@ -1,74 +1,76 @@
-/* Apply CSS styles to the login container */
-.login-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+body {
+  background-color: #121212;
+  color: white;
   }
   
-/* Apply CSS styles to the login form */
-.login-form {
-  background-color: #fff;
+  .login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  }
+  
+  .login-form {
+  background-color: #1c1c1c;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
   max-width: 400px;
   margin: auto;
-}
-
-/* Apply CSS styles to the form fields */
-.login-form input[type="text"],
-.login-form input[type="password"],
-.login-form input[type="submit"] {
+  }
+  
+  .login-form input[type="text"],
+  .login-form input[type="password"],
+  .login-form input[type="submit"] {
   display: block;
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
-  border: none;
-}
-
-/* Apply CSS styles to the form fields on focus */
-.login-form input[type="text"]:focus,
-.login-form input[type="password"]:focus,
-.login-form input[type="submit"]:focus {
+  border: #121212;
+  background-color: #1c1c1c;
+  color: #fff;
+  outline-color: #fff;
+  }
+  
+  .login-form input[type="text"]:focus,
+  .login-form input[type="password"]:focus,
+  .login-form input[type="submit"]:focus {
   outline: none;
-  box-shadow: 0 0 2px #4caf50;
-}
-
-/* Apply CSS styles to the submit button */
-.login-form input[type="submit"] {
-  background-color: #4caf50;
+  box-shadow: 0 0 2px #4285f4;
+  }
+  
+  .login-form input[type="submit"] {
+  background-color: #4285f4;
   color: #fff;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-/* Apply CSS styles to the submit button on hover */
-.login-form input[type="submit"]:hover {
-  background-color: #3e8e41;
-}
-
-/* Apply CSS styles to the register link container */
-.register-link-container {
+  }
+  
+  .login-form input[type="submit"]:hover {
+  background-color: #3d7ee7;
+  }
+  
+  .register-link-container {
   margin-top: 40px;
   text-align: center;
   font-size: 14px;
-}
-
-/* Apply CSS styles to the register link */
-.register-link {
-  background-color: #4caf50;
+  }
+  
+  .register-link {
+  background-color: #4285f4;
   color: #fff;
   padding: 8px 16px;
   border-radius: 5px;
   text-decoration: none;
   transition: background-color 0.3s ease;
-  margin-top: 1rem;
-}
+  margin-top: 0.8rem;
 
-/* Apply CSS styles to the register link on hover */
-.register-link:hover {
-  background-color: #3e8e41;
-}
+  }
+  
+  .register-link:hover {
+  background-color: #3d7ee7;
+  }
+
+  

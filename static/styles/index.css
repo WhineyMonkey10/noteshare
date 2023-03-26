@@ -1,5 +1,5 @@
 body {
-    background-color: #F7F7F7;
+    background-color: #121212;
     font-family: sans-serif;
     margin: 0;
 }
@@ -8,6 +8,7 @@ h1 {
     font-size: 36px;
     margin: 40px auto 20px;
     text-align: center;
+    color: white;
 }
 
 ul {
@@ -23,7 +24,7 @@ li {
     margin: 10px;
     padding: 10px;
     border-radius: 5px;
-    background-color: white;
+    background-color: #1c1c1c;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 250px;
@@ -34,7 +35,7 @@ a {
     padding: 10px 20px;
     margin: 20px auto;
     border-radius: 5px;
-    background-color: #3E8E41;
+    background-color: #4285f4;
     color: white;
     text-decoration: none;
     text-align: center;
@@ -42,7 +43,7 @@ a {
 }
 
 a:hover {
-    background-color: #2C6F2F;
+    background-color: #3d7ee7;
 }
 
 footer {
