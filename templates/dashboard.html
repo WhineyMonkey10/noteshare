@@ -12,16 +12,14 @@
   </head>
   <body>
     <header>
-      <div class="header-container">
-        <h1>Welcome, {{username}}!</h1>
-        <h1>Pro status: {{userHasPro}}</h1>
-        {% if userHasPro != True %}
-        <h2><a href="{{ url_for('purchase')}}">Buy Pro!</a></h2>
-        {% endif %}
-        <div class="user-menu">
-          <button class="profile-btn" onclick="location.href='/manageProfile'">Manage Profile</button>
-          <a href="/logout">Logout</a>
-        </div>
+      <h1>Welcome, {{username}}!</h1>
+      <h2>Pro status: {{userHasPro}}</h2>
+      {% if userHasPro != True %}
+      <h2><a href="{{ url_for('purchase')}}">Buy Pro!</a></h2>
+      {% endif %}
+      <div class="user-menu">
+        <button class="profile-btn" onclick="location.href='/manageProfile'">Manage Profile</button>
+        <a href="/logout">Logout</a>
       </div>
     </header>
     <main>

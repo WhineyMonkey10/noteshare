@@ -191,7 +191,14 @@ class Database:
     def getPasswordProtectedNotes(self, userID):
         passwordProtectedNotes = []
         for note in self.collection.find({"userID": userID}):
-            if note["protected"] == "True":
+            if note["protected"] == "True" and "CustomID" not in note:
+                passwordProtectedNotes.append(note)
+        return passwordProtectedNotes
+    
+    def getPasswordProtectedNotesWithCustomID(self, userID):
+        passwordProtectedNotes = []
+        for note in self.collection.find({"userID": userID}):
+            if note["protected"] == "True" and "CustomID" in note:
                 passwordProtectedNotes.append(note)
         return passwordProtectedNotes
     
@@ -313,10 +320,8 @@ class Database:
         return self.collection.find({"CustomID": {"$exists": True}, "private": "False"})
     
     def getCustomIDByNoteID(self, noteID):
-        try:
-            if self.collection.find_one({"_id": ObjectId(noteID)}) != None:
+        if self.collection.find_one({"_id": ObjectId(noteID)}):
+                print("Note found!: " + noteID)
                 return self.collection.find_one({"_id": ObjectId(noteID)})["CustomID"]
-            else:
-                return False
-        except:
+        else:
             return False
