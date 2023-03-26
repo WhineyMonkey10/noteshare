@@ -311,10 +311,7 @@ class Database:
             return False
     
     def getNoteByCustomID(self, customID):
-        if self.collection.find_one({"CustomID": customID}):
-            return self.collection.find_one({"CustomID": customID})
-        else:
-            return False
+        return self.collection.find_one({"CustomID": customID})
         
     def getCustomNotes(self):
         return self.collection.find({"CustomID": {"$exists": True}, "private": "False"})
@@ -323,5 +320,11 @@ class Database:
         if self.collection.find_one({"_id": ObjectId(noteID)}):
                 print("Note found!: " + noteID)
                 return self.collection.find_one({"_id": ObjectId(noteID)})["CustomID"]
+        else:
+            return False
+    
+    def getNoteContentByCustomID(self, noteID):
+        if self.collection.find_one({"CustomID": noteID}):
+            return self.collection.find_one({"CustomID": noteID})
         else:
             return False
