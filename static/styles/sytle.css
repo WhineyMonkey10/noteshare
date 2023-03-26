@@ -1,98 +1,107 @@
-body {
-    background-color: #f9f9f9;
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #121212;
     font-family: 'Helvetica Neue', sans-serif;
-}
-
-h1 {
+    color: #fff;
+  }
+  
+  h1 {
     text-align: center;
     margin-top: 50px;
-    color: #2a2a2a;
-}
-
-form {
-    background-color: #fff;
+    font-size: 2.5rem;
+    color: #fff;
+  }
+  
+  form {
+    background-color: #333;
+    color: #fff;
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px 0px #d9d9d9;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
     max-width: 600px;
     margin: 0 auto;
-}
-
-label {
+  }
+  
+  label {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
-    color: #2a2a2a;
-}
-
-input[type="text"], textarea {
+  }
+  
+  input[type="text"],
+  textarea,
+  input[type="password"] {
     border-radius: 5px;
     border: none;
     padding: 10px;
     width: 100%;
-    font-size: 16px;
+    font-size: 1rem;
     margin-bottom: 20px;
-    box-shadow: inset 0px 0px 5px 0px #d9d9d9;
-}
-
-input[type="password"] {
-    border-radius: 5px;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    font-size: 16px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    box-shadow: inset 0px 0px 5px 0px #d9d9d9;
-}
-
-.form-group {
+    background-color: #4c4c4c;
+    color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  input[type="password"] {
+    margin-left: 10px;
+  }
+  
+  .form-group {
     display: flex;
     align-items: center;
-}
-
-.form-group .form-checkbox {
+  }
+  
+  .form-group .form-checkbox {
     margin-right: 10px;
-}
-
-.form-checkbox-label {
+  }
+  
+  .form-checkbox-label {
     margin-left: 5px;
-}
-
-input[type="submit"] {
+    font-size: 1rem;
+  }
+  
+  input[type="submit"] {
     border-radius: 5px;
     border: none;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 1rem;
     color: #fff;
-    background-color: #4caf50;
+    background-color: #4285f4;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-}
-
-input[type="submit"]:hover {
-    background-color: #3e8e41;
-}
-
-.back-to-index {
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #3d7ee7;
+  }
+  
+  .back-to-index {
     margin-top: 20px;
     text-align: center;
-    font-size: 14px;
-    color: #7f7f7f;
-}
-
-.back-to-index a {
-    color: #7f7f7f;
+    font-size: 1rem;
+    color: #fff;
+  }
+  
+  .back-to-index a {
+    color: #fff;
     text-decoration: none;
-}
-
-.back-to-index a:hover {
-    color: #2a2a2a;
-}
-
-footer {
+  }
+  
+  .back-to-index a:hover {
+    color: #4caf50;
+  }
+  
+  footer {
     margin-top: 10px;
-    font-size: 12px;
-    color: #7f7f7f;
+    font-size: 0.8rem;
+    color: #fff;
     text-align: center;
-}
+  }
+  
+  input[type="password"] {
+    margin-top: 10px;
+  }
+  

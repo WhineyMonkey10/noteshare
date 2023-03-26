@@ -1,5 +1,5 @@
 body {
-    background-color: #F9F9F9;
+    background-color: #121212;
     font-family: 'Helvetica Neue', sans-serif;
 }
 
@@ -12,10 +12,10 @@ body {
 }
 
 .note-card {
-    background-color: #FFFFFF;
+    background-color: #1E1E1E;
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px 0px #D9D9D9;
+    box-shadow: 0px 0px 10px 0px #1E1E1E;
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
@@ -25,7 +25,7 @@ body {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
-    color: #2A2A2A;
+    color: #FFFFFF;
 }
 
 .note-card input[type="password"] {
@@ -35,7 +35,9 @@ body {
     width: 100%;
     font-size: 16px;
     margin-bottom: 20px;
-    box-shadow: inset 0px 0px 5px 0px #D9D9D9;
+    box-shadow: inset 0px 0px 5px 0px #000000;
+    background-color: #1E1E1E;
+    color: #FFFFFF;
 }
 
 .note-card input[type="submit"] {
@@ -44,13 +46,13 @@ body {
     padding: 10px 20px;
     font-size: 16px;
     color: #FFFFFF;
-    background-color: #4CAF50;
+    background-color: #4285F4;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
 
 .note-card input[type="submit"]:hover {
-    background-color: #3E8E41;
+    background-color: #3D7EE7;
 }
 
 .back-to-index {
@@ -60,7 +62,7 @@ body {
 
 .back-to-index a {
     text-decoration: none;
-    color: #2A2A2A;
+    color: #FFFFFF;
 }
 
 .back-to-index footer {

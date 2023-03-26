@@ -1,39 +1,48 @@
+body {
+background-color: #121212;
+font-family: sans-serif;
+margin: 0;
+}
+
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+height: 100vh;
 }
 
 .note-card {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
+padding: 20px;
+border-radius: 10px;
+text-align: center;
+color: #fff;
 }
 
 .back-to-index {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 14px;
+margin-top: 20px;
+text-align: center;
+font-size: 14px;
 }
 
 .back-to-index a {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+background-color: #4285f4;
+color: #fff;
+padding: 8px 16px;
+border-radius: 5px;
+text-decoration: none;
+transition: background-color 0.3s ease;
 }
 
 .back-to-index a:hover {
-    background-color: #3e8e41;
+background-color: #3d7ee7;
 }
 
 footer {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #888;
+margin-top: 10px;
+font-size: 12px;
+color: #999;
 }
+
+
+
