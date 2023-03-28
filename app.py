@@ -414,7 +414,7 @@ def userDeleteNote():
                     else:
                         return render_template('manageProfile.html', message="Error deleting note")
                 else:
-                    return render_template('manageProfile.html', message="You do not have permission to delete this note")
+                    return render_template('manageProfile.html', message="You do not have permission to delete this note or it does not exist")
             else:
                 return render_template('manageProfile.html', message="Note does not exist")
         else:
