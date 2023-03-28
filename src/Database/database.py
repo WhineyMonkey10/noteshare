@@ -36,7 +36,7 @@ class Database:
             return True
             
     def insertCustomIDNote(self, title, content, userID, private, id):
-        if collection.find({"customID": id}):
+        if self.collection.count_documents({"customID": id}) > 0:
             return False
         else:
             self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "CustomID": id})
@@ -48,7 +48,7 @@ class Database:
                 return True
     
     def insertCustomIDNoteWithPassword(self, title, content, password, userID, private, id):
-        if collection.find({"customID": id}):
+        if self.collection.count_documents({"customID": id}) > 0:
             return False
         else:
             self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "CustomID": id})
