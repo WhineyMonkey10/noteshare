@@ -172,6 +172,8 @@ def addNote():
     if 'logged_in' in session:
         if request.method == 'POST':
             title = request.form['title']
+            if len(title) > 20:
+                return render_template('alertMessage.html', message='Your note title must be less than 20 characters.')
             content = request.form['content']
             if request.form.get('isPrivate') is not None and request.form.get('isPublic') is not None:
                 password = request.form['password']
