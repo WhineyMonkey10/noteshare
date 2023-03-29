@@ -74,6 +74,13 @@ else
         fi
     fi
 
+    echo"Please enter the mongoDB collection name for the global messages"
+    if [ -z "${14}" ]; then
+        read -p "Global message Collection: " gMessageCollection
+    else
+        userCollection=${14}
+    fi
+
     echo "Stripe Details"
     echo "Please enter the Stripe publishable key"
     if [ -z "${10}" ]; then
@@ -103,6 +110,7 @@ else
     else
         stripePriceID=${13}
     fi
+
     
 
     // write the config file in JSON format
@@ -115,6 +123,7 @@ else
         \"userCollection\": \"$userCollection\",
         \"secretKey\": \"$secretKey\",
         \"encryptionKey\": \"$encryptionKey\",
+        \"gMessageCollection\": \"$gMessageCollection\"
     }" > src/Database/config.json
 fi
 

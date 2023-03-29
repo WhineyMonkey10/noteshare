@@ -44,6 +44,11 @@
         <input class="form-checkbox" type="checkbox" name="togglePro" id="togglePro" />
       </div>
 
+      <div class="form-group">
+        <label> Sign in as user </label>
+        <input class="form-checkbox" type="checkbox" name="userSignInAs" id="userSignInAs" />
+      </div>
+
       <input class="form-submit" type="submit" value="Done" />
     </form>
 
@@ -75,11 +80,15 @@
     </form>
 
     
-    <!--
-    <form class="form-container" action="{{ url_for('dangerZone') }}" method="POST">
+    <form class="form-container" action="{{ url_for('adminDangerZone') }}" method="POST">
       <div class="form-group">
         <label for="globalBanner">Global Message</label>
         <input class="form-input" type="text" name="globalBanner" id="globalBanner" />
+      </div>
+
+      <div class="form-group">
+        <input class="form-checkbox" type="checkbox" name="globalMEssage" id="globalMessage" />
+        <label for="globalMEssage">Add a Global Message </label>
       </div>
 
       <div class="form-group">
@@ -89,7 +98,7 @@
 
       <input class="form-submit" type="submit" value="Done" />
 
-    </form>-->
+    </form>
     
   </body>
 </html>

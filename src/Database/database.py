@@ -14,6 +14,7 @@ database = client[config['database']]
 collection = database[config['collection']]
 users = database[config['userCollection']]
 ecryptionKey = config['encryptionKey']
+globalMessages = database[config['gMessageCollection']]
 
 
 if ecryptionKey != "":
@@ -25,6 +26,7 @@ print(f"Connected to {config['uri']}.")
 class Database:
     def __init__(self):
         self.collection = collection
+        self.globalMessages = globalMessages
         
     def insertNote(self, title, content, userID, private):
         self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private})
@@ -332,5 +334,26 @@ class Database:
     def getNoteContentByCustomID(self, noteID):
         if self.collection.find_one({"CustomID": noteID}):
             return self.collection.find_one({"CustomID": noteID})
+        else:
+            return False
+        
+    def addGlobalMessage(self, message):
+        if self.globalMessages.count_documents({"message": message}) > 0:
+            return False
+        else:
+            self.globalMessages.insert_one({"message": message})
+            return True
+    def getGlobalMessages(self):
+        message = []
+        for messages in self.globalMessages.find():
+            messageDict = {}
+            messageDict["message"] = messages["message"]
+            messageDict["id"] = messages["_id"]
+            message.append(messageDict)
+        return message
+
+    def removeGlobalMessage(self):
+        if self.globalMessages.find_one_and_delete({}):
+            return True
         else:
             return False

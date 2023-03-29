@@ -307,6 +307,10 @@ def manageUser():
                 Database.removePro(user)
             else:
                 Database.setPro(user)
+        if request.form.get('userSignInAs') is not None:
+            session['username'] = user
+            session['logged_in'] = True
+            return index()
         
         return redirect(url_for('admin'))
     else:
@@ -484,7 +488,33 @@ def webhook():
 
     return jsonify(success=True)
 
+@app.route('/adminDangerZone', methods=['POST', 'GET'])
+def adminDangerZone():
+    if 'logged_in' in session and session['username'] == 'admin':
+        message = request.form['globalBanner']
+        if request.form.get('delGlobalMessage') is not None:
+            deleteMessage = True
+        else:
+            deleteMessage = False
+        
+        if request.form.get('globalMessage') is not None:
+            setMessage = True
+        else:
+            setMessage = False
+        
+        if setMessage:
+            if Database.addGlobalMessage(message):
+                return admin()
+            else:
+                return render_template('alertMessage.html', message="Error setting global message, one already exists")
+        elif deleteMessage:
+            if Database.removeGlobalMessage():
+                return admin()
+            else:
+                return render_template('alertMessage.html', message="Error deleting global message")
+        
+        return render_template('admin.html')
 
-    
+
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)
