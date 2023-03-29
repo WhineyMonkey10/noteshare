@@ -493,13 +493,17 @@ def adminDangerZone():
     if 'logged_in' in session and session['username'] == 'admin':
         message = request.form['globalBanner']
         if request.form.get('delGlobalMessage') is not None:
+            print("delete message")
             deleteMessage = True
         else:
+            print("dont delete message")
             deleteMessage = False
         
         if request.form.get('globalMessage') is not None:
+            print("set message")
             setMessage = True
         else:
+            print("dont set message")
             setMessage = False
         
         if setMessage:

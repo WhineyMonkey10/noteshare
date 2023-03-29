@@ -338,11 +338,15 @@ class Database:
             return False
         
     def addGlobalMessage(self, message):
-        if self.globalMessages.count_documents({"message": message}) > 0:
+        if self.globalMessages.count_documents({}) == 0:
+            self.globalMessages.insert_one({"message": message})
+            return True
+        elif self.globalMessages.count_documents({"message": message}) > 0:
             return False
         else:
             self.globalMessages.insert_one({"message": message})
             return True
+
     def getGlobalMessages(self):
         message = []
         for messages in self.globalMessages.find():
