@@ -348,13 +348,13 @@ class Database:
             return True
 
     def getGlobalMessages(self):
-        message = []
+        messageDict = {}
+        if self.globalMessages.count_documents({}) == 0:
+            return False
         for messages in self.globalMessages.find():
-            messageDict = {}
             messageDict["message"] = messages["message"]
             messageDict["id"] = messages["_id"]
-            message.append(messageDict)
-        return message
+        return messageDict
 
     def removeGlobalMessage(self):
         if self.globalMessages.find_one_and_delete({}):

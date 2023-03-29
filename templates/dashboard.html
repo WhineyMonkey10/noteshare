@@ -14,6 +14,9 @@
   <body>
     <header>
       <h1>Welcome, {{username}}!</h1>
+      {% if globalMessage != False %}
+      <h2>Alert: {{globalMessage.message}}</h2>
+      {% endif %}
       <h2>Pro status: {{userHasPro}}</h2>
       {% if userHasPro != True %}
       <h2><a href="{{ url_for('purchase')}}">Buy Pro!</a></h2>

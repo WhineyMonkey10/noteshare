@@ -340,7 +340,7 @@ def manageNotes():
 @app.route('/', methods=['POST', 'GET'])
 def dashboard():
     if 'logged_in' in session:
-        return render_template('dashboard.html', username=session['username'], userID=Database.getUserID(session['username']), total=Database.getStatistics(Database.getUserID(session['username']), 'total'), public=Database.getStatistics(Database.getUserID(session['username']), 'public'), private=Database.getStatistics(Database.getUserID(session['username']), 'private'), passwordProtected=Database.getStatistics(Database.getUserID(session['username']), 'password'), userHasPro=Database.checkPro(session['username']))
+        return render_template('dashboard.html', globalMessage=Database.getGlobalMessages(), username=session['username'], userID=Database.getUserID(session['username']), total=Database.getStatistics(Database.getUserID(session['username']), 'total'), public=Database.getStatistics(Database.getUserID(session['username']), 'public'), private=Database.getStatistics(Database.getUserID(session['username']), 'private'), passwordProtected=Database.getStatistics(Database.getUserID(session['username']), 'password'), userHasPro=Database.checkPro(session['username']))
     else:
         return render_template('login.html')
 
