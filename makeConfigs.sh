@@ -2,6 +2,11 @@ echo "Checking for config files"
 if [ -f "src/Database/config.json" ]; then
     echo "Database config file already exists"
 else
+
+    if [ -f "static/config.json" ]; then
+        echo "Stripe config file already exists"
+    else
+
     echo "Database config file does not exist"
     echo "Creating Database config file"
     echo "Making config files for Database"
@@ -111,10 +116,7 @@ else
         stripePriceID=${13}
     fi
 
-    
-
-    // write the config file in JSON format
-    echo "{
+        echo "{
         \"uri\": \"$uri\",
         \"database\": \"$database\",
         \"collection\": \"$collection\",
