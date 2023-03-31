@@ -12,11 +12,11 @@ load_dotenv()
 uri = os.getenv("URI")
 
 client = MongoClient(uri)
-database = client[os.getenv("DATABASE")]
-collection = database[os.getenv("COLLECTION")]
-users = database[os.getenv("USERCOLLECTION")]
-ecryptionKey = os.getenv("ENCRYPTIONKEY")
-globalMessages = database[os.getenv("GMESSAGECOLLECTION")]
+database = client[str(os.getenv("DATABASE"))]
+collection = database[str(os.getenv("COLLECTION"))]
+users = database[str(os.getenv("USERCOLLECTION"))]
+ecryptionKey = str(os.getenv("ENCRYPTIONKEY"))
+globalMessages = (database[str(os.getenv("GMESSAGECOLLECTION"))])
 
 
 if ecryptionKey != "":

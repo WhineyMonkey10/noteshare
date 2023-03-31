@@ -120,19 +120,20 @@ else
         stripePriceID=${13}
     fi
 
-echo 'URI: "'"${uri}"'"
-DATABASE: "'"${database}"'"
-COLLECTION: "'"${collection}"'"
-USERNAME: "'"${username}"'"
-PASSWORD: "'"${password}"'"
-USERCOLLECTION: "'"${userCollection}"'"
-SECRETKEY: "'"${secretKey}"'"
-ENCRYPTIONKEY: "'"${encryptionKey}"'"
-GMESSAGECOLLECTION: "'"${gMessageCollection}"'"
-PUBLISHSTRIPEKEY: "'"${stripeKeyPublishable}"'"
-SECRETSTRIPEKEY: "'"${stripeKeySecret}"'"
-STRIPEPRICEID: "'"${stripePriceID}"'"
-STRIPEENDPOINTSECRET: "'"${stripeEP}"'"
+echo 'URI='"${uri}"'
+DATABASE='"${database}"'
+COLLECTION='"${collection}"'
+USERNAME='"${username}"'
+PASSWORD='"${password}"'
+USERCOLLECTION='"${userCollection}"'
+SECRETKEY='"${secretKey}"'
+ENCRYPTIONKEY='"${encryptionKey}"'
+GMESSAGECOLLECTION='"${gMessageCollection}"'
+PUBLISHSTRIPEKEY='"${stripeKeyPublishable}"'
+SECRETSTRIPEKEY='"${stripeKeySecret}"'
+STRIPEPRICEID='"${stripePriceID}"'
+STRIPEENDPOINTSECRET='"${stripeEP}"'
 ' >> .env
+
 
 fi

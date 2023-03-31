@@ -12,11 +12,11 @@ Database = Database()
 app = Flask(__name__)
 load_dotenv()
 app.secret_key = os.getenv('SECRETKEY')
-app.config['STRIPE_SECRET_KEY'] = os.getenv('SECRETSTRIPEKEY')
-app.config['STRIPE_PUBLIC_KEY'] = os.getenv('PUBLISHSTRIPEKEY')
+app.config['STRIPE_SECRET_KEY'] = str(os.getenv('SECRETSTRIPEKEY'))
+app.config['STRIPE_PUBLIC_KEY'] = str(os.getenv('PUBLISHSTRIPEKEY'))
 stripe.api_key = app.config['STRIPE_SECRET_KEY']
-stripePriceID = os.getenv('STRIPEPRICEID')
-endpoint_secret = os.getenv('STRIPEENDPOINTSECRET')
+stripePriceID = str(os.getenv('STRIPEPRICEID'))
+endpoint_secret = str(os.getenv('STRIPEENDPOINTSECRET'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
