@@ -22,7 +22,7 @@ globalMessages = (database[str(os.getenv("GMESSAGECOLLECTION"))])
 if ecryptionKey != "":
     encrypt = Fernet(codecs.encode((ecryptionKey).encode('utf-8'), 'base64'))     
 
-print(f"Connected to {uri} and running.")
+print(f"Connected to {uri} and the application is running.")
     
 
 class Database:
