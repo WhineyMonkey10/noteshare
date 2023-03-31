@@ -4,23 +4,25 @@ import json
 from bson.objectid import ObjectId
 from cryptography.fernet import Fernet
 import codecs
+import os
+from dotenv import load_dotenv
 
-config = json.load(open('src/Database/config.json'))
+load_dotenv()
 
+uri = os.getenv("URI")
 
-
-client = MongoClient(config['uri'])
-database = client[config['database']]
-collection = database[config['collection']]
-users = database[config['userCollection']]
-ecryptionKey = config['encryptionKey']
-globalMessages = database[config['gMessageCollection']]
+client = MongoClient(uri)
+database = client[os.getenv("DATABASE")]
+collection = database[os.getenv("COLLECTION")]
+users = database[os.getenv("USERCOLLECTION")]
+ecryptionKey = os.getenv("ENCRYPTIONKEY")
+globalMessages = database[os.getenv("GMESSAGECOLLECTION")]
 
 
 if ecryptionKey != "":
     encrypt = Fernet(codecs.encode((ecryptionKey).encode('utf-8'), 'base64'))     
 
-print(f"Connected to {config['uri']}.")
+print(f"Connected to {uri} and running.")
     
 
 class Database:

@@ -4,18 +4,19 @@ import json
 from bson.objectid import ObjectId
 from waitress import serve
 import stripe
+import os
+from dotenv import load_dotenv
 Database = Database()
 
 
 app = Flask(__name__)
-config = json.load(open('src/Database/config.json'))
-staticConfig = json.load(open('static/config.json'))
-app.secret_key = config['secretKey']
-app.config['STRIPE_SECRET_KEY'] = staticConfig['secretStripeKey']
-app.config['STRIPE_PUBLIC_KEY'] = staticConfig['publishStripeKey']
+load_dotenv()
+app.secret_key = os.getenv('SECRETKEY')
+app.config['STRIPE_SECRET_KEY'] = os.getenv('SECRETSTRIPEKEY')
+app.config['STRIPE_PUBLIC_KEY'] = os.getenv('PUBLISHSTRIPEKEY')
 stripe.api_key = app.config['STRIPE_SECRET_KEY']
-stripePriceID = staticConfig['stripePriceID']
-endpoint_secret = staticConfig['stripeEndpointSecret']
+stripePriceID = os.getenv('STRIPEPRICEID')
+endpoint_secret = os.getenv('STRIPEENDPOINTSECRET')
 
 
 @app.route('/login', methods=['POST', 'GET'])

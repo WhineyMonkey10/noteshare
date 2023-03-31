@@ -1,11 +1,7 @@
-echo "Checking for config files"
-if [ -f "src/Database/config.json" ]; then
-    echo "Database config file already exists"
+echo "Checking for config files..."
+if [ -f ".env" ]; then
+    echo ".env file exists, please delete it if you want to make a new one"
 else
-
-    if [ -f "static/config.json" ]; then
-        echo "Stripe config file already exists"
-    else
 
     echo "Database config file does not exist"
     echo "Creating Database config file"
@@ -79,7 +75,8 @@ else
         fi
     fi
 
-    echo"Please enter the mongoDB collection name for the global messages"
+    echo "Please enter the mongoDB collection name for the global messages"
+
     if [ -z "${14}" ]; then
         read -p "Global message Collection: " gMessageCollection
     else
@@ -87,51 +84,55 @@ else
     fi
 
     echo "Stripe Details"
+
     echo "Please enter the Stripe publishable key"
+
     if [ -z "${10}" ]; then
         read -p "Stripe Publishable Key: " stripeKeyPublishable
     else
         stripeKey=${10}
     fi
 
-    echo"Please enter the Stripe secret key"
+
+    echo "Please enter the Stripe secret key"
+
     if [ -z "${11}" ]; then
         read -p "Stripe Secret Key: " stripeKeySecret
     else
         stripeKey=${11}
     fi
 
-    echo"Please enter the Stripe price ID"
+    echo "Please enter the Stripe price ID"
+
     if [ -z "${12}" ]; then
         read -p "Stripe Price ID: " stripePriceID
     else
         stripePriceID=${12}
     fi
 
-    echo"Please enter the Stripe endpoint secret for the webhook"
-    echo"Please enter the Stripe price ID"
+    echo "Please enter the Stripe endpoint secret for the webhook"
+
+    echo "Please enter the Stripe price ID"
+
     if [ -z "${13}" ]; then
         read -p "Stripe E.P: " stripeEP
     else
         stripePriceID=${13}
     fi
 
-        echo "{
-        \"uri\": \"$uri\",
-        \"database\": \"$database\",
-        \"collection\": \"$collection\",
-        \"username\": \"$username\",
-        \"password\": \"$password\",
-        \"userCollection\": \"$userCollection\",
-        \"secretKey\": \"$secretKey\",
-        \"encryptionKey\": \"$encryptionKey\",
-        \"gMessageCollection\": \"$gMessageCollection\"
-    }" > src/Database/config.json
-fi
+echo 'URI: "'"${uri}"'"
+DATABASE: "'"${database}"'"
+COLLECTION: "'"${collection}"'"
+USERNAME: "'"${username}"'"
+PASSWORD: "'"${password}"'"
+USERCOLLECTION: "'"${userCollection}"'"
+SECRETKEY: "'"${secretKey}"'"
+ENCRYPTIONKEY: "'"${encryptionKey}"'"
+GMESSAGECOLLECTION: "'"${gMessageCollection}"'"
+PUBLISHSTRIPEKEY: "'"${stripeKeyPublishable}"'"
+SECRETSTRIPEKEY: "'"${stripeKeySecret}"'"
+STRIPEPRICEID: "'"${stripePriceID}"'"
+STRIPEENDPOINTSECRET: "'"${stripeEP}"'"
+' >> .env
 
-echo "{
-        \"publishStripeKey\": \"$stripeKeyPublishable\",
-        \"secretStripeKey\": \"$stripeKeySecret\",
-        \"stripePriceID\": \"$stripePriceID\",
-        \"stripeEndpointSecret\": \"$stripeEP\",
- }" > static/config.json
+fi
