@@ -165,7 +165,6 @@ transition: all 0.2s ease-in-out;
 background-color: #004499;
 }
 
-/* Form Buttons */
 input[type="submit"] {
 background-color: #0077cc;
 border: none;
@@ -182,7 +181,6 @@ input[type="submit"]:hover {
 background-color: #004499;
 }
 
-/* Animations */
 @keyframes fadeIn {
 from {
 opacity: 0;
@@ -245,7 +243,6 @@ animation-name: scaleIn;
 animation-duration: 1s;
 }
 
-/* General styles */
 
 * {
   box-sizing: border-box;
@@ -306,7 +303,6 @@ li {
   margin: 10px 0;
 }
 
-/* Dashboard styles */
 
 .sidebar h2 {
   margin-top: 0;
@@ -379,11 +375,10 @@ input[type="submit"]:hover {
 }
 
 footer {
-  margin-top: 20px;
+  margin-top: 15px;
   text-align: center;
 }
 
-/* Statistics styles */
 
 .content h2 {
   margin-top: 0;
@@ -410,7 +405,6 @@ footer {
   font-weight: normal;
 }
 
-/* Form styles */
 
 label {
   display: block;
@@ -425,4 +419,14 @@ textarea {
   padding: 10px;
   margin-bottom: 20px;
   border: none;
+}
+
+.content footer {
+  font-size: 14px;
+  color: #888;
+}
+
+footer {
+  margin-top: -5px; 
+  text-align: center;
 }
