@@ -7,9 +7,27 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/note.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
     <title>Loaded Note [{{ noteID }}]</title>
+    <script>
+        function getShareLink() {
+            let shareLink = window.location.href;
+            let shareLinkInput = document.createElement("input");
+            shareLinkInput.value = shareLink;
+            document.body.appendChild(shareLinkInput);
+            shareLinkInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(shareLinkInput);
+            let shareButton = document.querySelector(".share-button button");
+            shareButton.innerHTML = "Copied link!";
+            shareButton.style.backgroundColor = "green";
+
+        }
+    </script>
 </head>
 <body>
     <div class="container">
+        <div class="share-button">
+            <button onclick="getShareLink()" class="button">Share</button>
+        </div>
         <div class="note-card">
             <h1>{{ noteTitle }}</h1>
             <p>{{ noteContent }}</p>
