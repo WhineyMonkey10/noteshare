@@ -50,7 +50,8 @@ def privateNotes(id, noteCreator, noteID):
                 note = Database.getNoteById(noteID)
                 title = note['title']
                 content = note['content']
-                creator = Database.getNoteCreator(noteID)
+                creator = Database.getNoteCreator(id)
+                creator = Database.getUsernameFromID(creator)
                 id = note['_id']
                 if 'CustomID' in note:
                     id = note['CustomID']
@@ -84,9 +85,11 @@ def note(id):
         content = note['content']
         if customID == False:
             creator = Database.getNoteCreator(id)
+            creator = Database.getUsernameFromID(creator)
             noteID = note['_id']
         else:
-            creator = Database.getNoteCreator(note['_id'])
+            creator = Database.getNoteCreator(id)
+            creator = Database.getUsernameFromID(creator)
             noteID = id
             
         protected = note['protected']
@@ -131,9 +134,11 @@ def accessProtectedNote(id):
             noteContent = note['content']
             if customID == False:
                 creator = Database.getNoteCreator(id)
+                creator = Database.getUsernameFromID(creator)
                 noteID = note['_id']
             else:
-                creator = Database.getNoteCreator(note['_id'])
+                creator = Database.getNoteCreator(id)
+                creator = Database.getUsernameFromID(creator)
                 noteID = id
             
             protected = note['protected']
