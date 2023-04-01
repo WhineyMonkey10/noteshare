@@ -363,3 +363,39 @@ class Database:
             return True
         else:
             return False
+    
+    def changeTitle(self, noteID, title):
+        try:
+            if self.collection.find_one({"_id": ObjectId(noteID)}):
+                self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"title": title}})
+                return True
+            else:
+                return False
+            
+        except Exception as e:
+            return e
+    
+    def changeContent(self, noteID, content):
+        try:
+            if self.collection.find_one({"_id": ObjectId(noteID)}):
+                self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"content": content}})
+                return True
+            else:
+                return False
+        except Exception as e:
+            return e
+    
+    def changeCustomID(self, noteID, customID):
+        try:
+            if self.collection.find_one({"_id": ObjectId(noteID)}):
+                self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"CustomID": customID}})
+                return True
+            else:
+                return False
+        except Exception as e:
+            return e
+    
+    
+        
+        
+        

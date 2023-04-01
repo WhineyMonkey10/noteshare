@@ -320,7 +320,51 @@ def manageUser():
 
 @app.route('/editNote/<id>', methods=['POST', 'GET'])
 def editNote(id):
-    pass
+    if 'logged_in' in session:
+        noteID = id
+        if session['username'] == Database.getNoteCreator(noteID):
+            if request.form.get('changeTitleCheck'):
+                newTitle = request.form['title']
+                if Database.changeTitle(noteID, newTitle):
+                    return index()
+                else:
+                    errMsg = f"Error: {Database.changeTitle(noteID, newTitle)}"
+                    return render_template('alertMessage.html', message=errMsg)
+            if request.form.get('changeContentCheck'):
+                newContent = request.form['content']
+                if Database.changeContent(noteID, newContent):
+                    return index()
+                else:
+                    errMsg = f"Error: {Database.changeContent(noteID, newContent)}"
+                    return render_template('alertMessage.html', message=errMsg)
+            if request.form.get('customIDCheck'):
+                newCustomID = request.form['customID']
+                if Database.changeCustomID(noteID, newCustomID):
+                    return index()
+                else:
+                    errMsg = f"Error: {Database.changeCustomID(noteID, newCustomID)}"
+                    return render_template('alertMessage.html', message=errMsg)
+            #if request.form.get('isPublic'):
+            #    password = request.form['password']
+            #    if Database.changePublic(noteID, "True", password):
+            #        return index()
+            #    else:
+            #        errMsg = f"Error: {Database.changePublic(noteID, 'True', password)}"
+            #        return render_template('alertMessage.html', message=errMsg)
+            #if request.form.get('isPrivate'):
+            #    if Database.changePublic(noteID, "False", ""):
+            #        return index()
+            #    else:
+            #        errMsg = f"Error: {Database.changePublic(noteID, 'False', '')}"
+            #        return render_template('alertMessage.html', message=errMsg)
+            #if request.form.get('isPrivate') and request.form.get('isPublic'):
+            #    password = request.form['password']
+            #    if Database.changePublicAndPrivate(noteID, password):
+            #        return index()
+            #    else:
+            #        errMsg = f"Error: {Database.changePublicAndPrivate(noteID, password)}"
+            #        return render_template('alertMessage.html', message=errMsg)
+        return render_template('editNote.html')
 
 @app.route('/manageNotes', methods=['POST', 'GET'])
 def manageNotes():
@@ -515,7 +559,6 @@ def adminDangerZone():
                 return render_template('alertMessage.html', message="Error deleting global message")
         
         return render_template('admin.html')
-
-
+    
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)
