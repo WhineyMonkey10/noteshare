@@ -71,67 +71,20 @@ def index():
 
 @app.route('/note/<id>')
 def note(id):
-    
-    def loadNote(id):
-        if Database.getNoteContentByCustomID(id) == False:
-            note = Database.getNoteById(id)
-            customID = False
-        else:
-            note = Database.getNoteContentByCustomID(id)
-            customID = True
-        
-        
-        title = note['title']
-        content = note['content']
-        if customID == False:
-            creator = Database.getNoteCreator(id)
-            creator = Database.getUsernameFromID(creator)
-            noteID = note['_id']
-        else:
-            creator = Database.getNoteCreator(id)
-            creator = Database.getUsernameFromID(creator)
-            noteID = id
-            
-        protected = note['protected']
-        private = note['private']
-        
-        if protected == "True":
-            return render_template('protectednote.html', noteTitle=title, noteContent=content, noteID=noteID)
-
-        if private == "True":
-            if 'logged_in' not in session:
-                return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
-            else:
-                if Database.getNoteCreator(noteID) != Database.getUserID(session['username']):
-                    return render_template('alertMessage.html', message='You do not have access to this note.')
-            return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID), noteID)
-        
-        return render_template('note.html', noteTitle=title, noteContent=content, noteID=noteID, userID=creator)
-        
-    if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
-        return loadNote(id)
-    elif Database.checkNoteOwnerProStatus(id) == True and 'logged_in' in session:
-        return loadNote(id)
-    else:
-        if 'logged_in' in session:
-            return loadNote(id)
-        else:
-            return render_template('login.html')
-
-@app.route('/accessProtectedNote/<id>', methods=['POST', 'GET'])
-def accessProtectedNote(id):
-    def loadNote(id):
-        if request.method == 'POST':
+    if Database.checkNoteExists(id) == False:
+        return render_template('alertMessage.html', message='This note does not exist.')
+    else:   
+        def loadNote(id):
             if Database.getNoteContentByCustomID(id) == False:
                 note = Database.getNoteById(id)
                 customID = False
             else:
                 note = Database.getNoteContentByCustomID(id)
                 customID = True
-        
-        
-            noteTitle = note['title']
-            noteContent = note['content']
+            
+            
+            title = note['title']
+            content = note['content']
             if customID == False:
                 creator = Database.getNoteCreator(id)
                 creator = Database.getUsernameFromID(creator)
@@ -140,38 +93,90 @@ def accessProtectedNote(id):
                 creator = Database.getNoteCreator(id)
                 creator = Database.getUsernameFromID(creator)
                 noteID = id
-            
+                
             protected = note['protected']
             private = note['private']
-            password = request.form['protPass']
+            
+            if protected == "True":
+                return render_template('protectednote.html', noteTitle=title, noteContent=content, noteID=noteID)
 
-            if protected == "True" and private == "True":
+            if private == "True":
                 if 'logged_in' not in session:
                     return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
                 else:
-                    noteCreator = Database.getNoteCreator(noteID)
                     if Database.getNoteCreator(noteID) != Database.getUserID(session['username']):
                         return render_template('alertMessage.html', message='You do not have access to this note.')
-                if password == Database.getNoteById(id)['password']:
-                    return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID), noteID)
-            if protected == "True":
-                if password == Database.getNoteById(id)['password']:
-                    noteCreator = Database.getNoteCreator(noteID)
-                    return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
-                else:
-                    return render_template('protectednote.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
-        else:
-            return render_template('login.html')
-    
-    if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
-        return loadNote(id)
-    elif Database.checkNoteOwnerProStatus(id) == True and 'logged_in' in session:
-        return loadNote(id)
-    else:
-        if 'logged_in' in session:
+                return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID), noteID)
+            
+            return render_template('note.html', noteTitle=title, noteContent=content, noteID=noteID, userID=creator)
+            
+        if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
+            return loadNote(id)
+        elif Database.checkNoteOwnerProStatus(id) == True and 'logged_in' in session:
             return loadNote(id)
         else:
-            return render_template('login.html')
+            if 'logged_in' in session:
+                return loadNote(id)
+            else:
+                return render_template('login.html')
+
+@app.route('/accessProtectedNote/<id>', methods=['POST', 'GET'])
+def accessProtectedNote(id):
+    if Database.checkNoteExists(id) == False:
+        return render_template('alertMessage.html', message='This note does not exist.')
+    else:
+        def loadNote(id):
+            if request.method == 'POST':
+                if Database.getNoteContentByCustomID(id) == False:
+                    note = Database.getNoteById(id)
+                    customID = False
+                else:
+                    note = Database.getNoteContentByCustomID(id)
+                    customID = True
+            
+            
+                noteTitle = note['title']
+                noteContent = note['content']
+                if customID == False:
+                    creator = Database.getNoteCreator(id)
+                    creator = Database.getUsernameFromID(creator)
+                    noteID = note['_id']
+                else:
+                    creator = Database.getNoteCreator(id)
+                    creator = Database.getUsernameFromID(creator)
+                    noteID = id
+                
+                protected = note['protected']
+                private = note['private']
+                password = request.form['protPass']
+
+                if protected == "True" and private == "True":
+                    if 'logged_in' not in session:
+                        return render_template('alertMessage.html', message='You must be logged in to access this note as it is private.')
+                    else:
+                        noteCreator = Database.getNoteCreator(noteID)
+                        if Database.getNoteCreator(noteID) != Database.getUserID(session['username']):
+                            return render_template('alertMessage.html', message='You do not have access to this note.')
+                    if password == Database.getNoteById(id)['password']:
+                        return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID), noteID)
+                if protected == "True":
+                    if password == Database.getNoteById(id)['password']:
+                        noteCreator = Database.getNoteCreator(noteID)
+                        return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
+                    else:
+                        return render_template('protectednote.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
+            else:
+                return render_template('login.html')
+        
+        if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
+            return loadNote(id)
+        elif Database.checkNoteOwnerProStatus(id) == True and 'logged_in' in session:
+            return loadNote(id)
+        else:
+            if 'logged_in' in session:
+                return loadNote(id)
+            else:
+                return render_template('login.html')
 
 @app.route('/addNote', methods=['POST', 'GET'])
 def addNote():

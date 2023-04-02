@@ -399,6 +399,19 @@ class Database:
         except Exception as e:
             return e
     
+    def checkNoteExists(self, noteID):
+        if ObjectId.is_valid(noteID):
+            if self.collection.find_one({"_id": ObjectId(noteID)}):
+                return True
+            else:
+                return False
+        elif self.collection.find_one({"CustomID": noteID}):
+            if self.collection.find_one({"CustomID": noteID}):
+                return True
+            else:
+                return False
+        else:
+            return False
         
         
 
