@@ -50,7 +50,7 @@ def privateNotes(id, noteCreator, noteID):
                 note = Database.getNoteById(noteID)
                 title = note['title']
                 content = note['content']
-                creator = Database.getNoteCreator(id)
+                creator = Database.getNoteCreator(noteID)
                 creator = Database.getUsernameFromID(creator)
                 id = note['_id']
                 if 'CustomID' in note:
