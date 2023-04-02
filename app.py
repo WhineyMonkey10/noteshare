@@ -33,7 +33,7 @@ def login():
                 session['logged_in'] = True
                 if username == "admin":
                     return render_template('admin.html')
-                return dashboard()
+                return redirect(url_for('dashboard'))
             else:
                 return render_template('login.html')
         return render_template('login.html')
@@ -448,6 +448,7 @@ def deleteProfile():
     if 'logged_in' in session:
         if request.method == 'POST':
             if Database.deleteAccount(session['username']):
+                Database.clearUserNotes(session['username'])
                 session.pop('username', None)
                 session.pop('password', None)
                 session.pop('logged_in', None)
