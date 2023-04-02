@@ -53,6 +53,11 @@ button {
     transition: background-color 0.3s ease;
     border: none;
   }
+
+.button:hover {
+    background-color: #3d7ee7;
+    cursor: pointer;
+  }
   
 
 
