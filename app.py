@@ -448,7 +448,6 @@ def deleteProfile():
     if 'logged_in' in session:
         if request.method == 'POST':
             if Database.deleteAccount(session['username']):
-                Database.clearUserNotes(session['username'])
                 session.pop('username', None)
                 session.pop('password', None)
                 session.pop('logged_in', None)

@@ -84,8 +84,8 @@ class Database:
         except:
             return False
         
-    def clearUserNotes(self, userID):
-        self.collection.delete_many({"userID": userID})
+    def clearUserNotes(self, username):
+        self.collection.delete_many({"userID": ObjectId(self.getUserID(username))})
     
     def updateNote(self, _id, newNote):
         self.collection.update_one(_id, {"$set": newNote})
@@ -125,8 +125,8 @@ class Database:
 
     def deleteAccount(self, username):
         if users.find_one({"username": username}):
-            users.delete_one({"username": username})
             self.clearUserNotes(username)
+            users.delete_one({"username": username})
             return True
         else:
             return False
