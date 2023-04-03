@@ -412,6 +412,4 @@ class Database:
                 return False
         else:
             return False
-        
-        
 

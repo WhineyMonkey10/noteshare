@@ -6,16 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/errorMessage.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
-    <title>Alert!</title>
+    <title>Error!</title>
 </head>
 <body>
     
-    {% if advanced %}
-    <h1>{{ message }}</h1>
-    <h2>This is a backend error, would you like to <a href="{{ url_for('advancedError', message=Admessage)}}">see more</a>?</h2>
-    {% else %}
-        <h1>{{ message }}</h1>
-    {% endif %}
+    {{ message }}
     <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
 
 </body>

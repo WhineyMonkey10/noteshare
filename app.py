@@ -82,7 +82,11 @@ def note(id):
                 note = Database.getNoteContentByCustomID(id)
                 customID = True
             
-            
+            loaderIsOwner = Database.getNoteCreator(id)
+            if loaderIsOwner == Database.getUserID(session['username']):
+                loaderIsOwner = True
+            else:
+                loaderIsOwner = False
             title = note['title']
             content = note['content']
             if customID == False:
@@ -108,7 +112,7 @@ def note(id):
                         return render_template('alertMessage.html', message='You do not have access to this note.')
                 return privateNotes(Database.getUserID(session['username']), Database.getNoteCreator(noteID), noteID)
             
-            return render_template('note.html', noteTitle=title, noteContent=content, noteID=noteID, userID=creator)
+            return render_template('note.html', noteTitle=title, noteContent=content, noteID=noteID, userID=creator, loaderIsOwner=loaderIsOwner)
             
         if Database.checkNoteOwnerProStatus(id) == True and 'logged_in' not in session:
             return loadNote(id)
@@ -134,7 +138,12 @@ def accessProtectedNote(id):
                     note = Database.getNoteContentByCustomID(id)
                     customID = True
             
-            
+                loaderIsOwner = Database.getNoteCreator(id)
+                if loaderIsOwner == Database.getUserID(session['username']):
+                    loaderIsOwner = True
+                else:
+                    loaderIsOwner = False
+                
                 noteTitle = note['title']
                 noteContent = note['content']
                 if customID == False:
@@ -162,7 +171,7 @@ def accessProtectedNote(id):
                 if protected == "True":
                     if password == Database.getNoteById(id)['password']:
                         noteCreator = Database.getNoteCreator(noteID)
-                        return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator)
+                        return render_template('note.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID, userID=noteCreator, loaderIsOwner=loaderIsOwner)
                     else:
                         return render_template('protectednote.html', noteTitle=noteTitle, noteContent=noteContent, noteID=noteID)
             else:
@@ -328,53 +337,55 @@ def manageUser():
         return render_template('login.html')
 
 
-@app.route('/editNote/<id>', methods=['POST', 'GET'])
+@app.route('/editNote/<id>', methods=['POST', 'GET', 'PUT'])
 def editNote(id):
     if 'logged_in' in session:
-        noteID = id
-        if session['username'] == Database.getNoteCreator(noteID):
-            if request.form.get('changeTitleCheck'):
-                newTitle = request.form['title']
-                if Database.changeTitle(noteID, newTitle):
-                    return index()
+        if request.method == 'POST':
+            noteID = id
+            if ObjectId.is_valid(noteID) or Database.checkNoteExists(noteID):
+                if Database.getNoteCreator(noteID) != False:
+                    if session['username'] == Database.getUsernameFromID(Database.getNoteCreator(noteID)):
+                        if Database.checkNoteExists(noteID):
+                            newTitle = request.form['title']
+                            if Database.changeTitle(noteID, newTitle):
+                                newContent = request.form['content']
+                                if Database.changeContent(noteID, newContent):
+                                    newCustomID = request.form['customID']
+                                    if Database.changeCustomID(noteID, newCustomID):
+                                        return index()
+                            #if request.form.get('isPublic'):
+                            #    password = request.form['password']
+                            #    if Database.changePublic(noteID, "True", password):
+                            #        return index()
+                            #    else:
+                            #        errMsg = f"Error: {Database.changePublic(noteID, 'True', password)}"
+                            #        return render_template('alertMessage.html', message=errMsg)
+                            #if request.form.get('isPrivate'):
+                            #    if Database.changePublic(noteID, "False", ""):
+                            #        return index()
+                            #    else:
+                            #        errMsg = f"Error: {Database.changePublic(noteID, 'False', '')}"
+                            #        return render_template('alertMessage.html', message=errMsg)
+                            #if request.form.get('isPrivate') and request.form.get('isPublic'):
+                            #    password = request.form['password']
+                            #    if Database.changePublicAndPrivate(noteID, password):
+                            #        return index()
+                            #    else:
+                            #        errMsg = f"Error: {Database.changePublicAndPrivate(noteID, password)}"
+                            #        return render_template('alertMessage.html', message=errMsg)
+                        else:
+                            return render_template('alertMessage.html', message="Note does not exist!")
+                    else:
+                        return render_template('alertMessage.html', message="You are not the owner of this note!")
                 else:
-                    errMsg = f"Error: {Database.changeTitle(noteID, newTitle)}"
-                    return render_template('alertMessage.html', message=errMsg)
-            if request.form.get('changeContentCheck'):
-                newContent = request.form['content']
-                if Database.changeContent(noteID, newContent):
-                    return index()
-                else:
-                    errMsg = f"Error: {Database.changeContent(noteID, newContent)}"
-                    return render_template('alertMessage.html', message=errMsg)
-            if request.form.get('customIDCheck'):
-                newCustomID = request.form['customID']
-                if Database.changeCustomID(noteID, newCustomID):
-                    return index()
-                else:
-                    errMsg = f"Error: {Database.changeCustomID(noteID, newCustomID)}"
-                    return render_template('alertMessage.html', message=errMsg)
-            #if request.form.get('isPublic'):
-            #    password = request.form['password']
-            #    if Database.changePublic(noteID, "True", password):
-            #        return index()
-            #    else:
-            #        errMsg = f"Error: {Database.changePublic(noteID, 'True', password)}"
-            #        return render_template('alertMessage.html', message=errMsg)
-            #if request.form.get('isPrivate'):
-            #    if Database.changePublic(noteID, "False", ""):
-            #        return index()
-            #    else:
-            #        errMsg = f"Error: {Database.changePublic(noteID, 'False', '')}"
-            #        return render_template('alertMessage.html', message=errMsg)
-            #if request.form.get('isPrivate') and request.form.get('isPublic'):
-            #    password = request.form['password']
-            #    if Database.changePublicAndPrivate(noteID, password):
-            #        return index()
-            #    else:
-            #        errMsg = f"Error: {Database.changePublicAndPrivate(noteID, password)}"
-            #        return render_template('alertMessage.html', message=errMsg)
-        return render_template('editNote.html')
+                    return render_template('alertMessage.html', message="Invalid note ID!")
+            else:
+                return render_template('alertMessage.html', message="Invalid note ID!")
+            return render_template('editNote.html', noteID=noteID)
+        return render_template('editNote.html', noteID=id)
+    else:
+        return render_template('login.html')
+        
 
 @app.route('/manageNotes', methods=['POST', 'GET'])
 def manageNotes():
@@ -480,6 +491,27 @@ def userDeleteNote():
             return render_template('manageProfile.html', message="Not a valid note ID")
     else:
         return render_template('login.html')
+    
+@app.route('/editDeleteNote', methods=['POST', 'GET'])
+def editDeleteNote():
+    if 'logged_in' in session:
+        note_id = request.args.get('noteID')
+        if ObjectId.is_valid(note_id):
+            if Database.getNoteCreator(note_id) != None:
+                if Database.getNoteCreator(note_id) == Database.getUserID(session['username']):
+                    if Database.deleteNote({"_id": ObjectId(note_id)}):
+                        return render_template('alertMessage.html', message="Successfully deleted note")
+                    else:
+                        return render_template('alertMessage.html', message="Error deleting note")
+                else:
+                    return render_template('alertMessage.html', message="You do not have permission to delete this note or it does not exist")
+            else:
+                return render_template('alertMessage.html', message="Note does not exist")
+        else:
+            return render_template('alertMessage.html', message="Invalid note ID")
+    else:
+        return render_template('login.html')
+
 
 @app.route('/thanks', methods=['POST', 'GET'])
 def thanks():
@@ -521,13 +553,10 @@ def webhook():
           event_data, stripe.api_key
         )
     except ValueError as e:
-        # Invalid payload
         return '', 400
 
-    # Handle the event
     if event.type == 'payment_intent.succeeded':
         payment_intent = event.data.object
-        # Get the username from the payment intent metadata
         metadata = payment_intent.metadata
         username = metadata['username']
         Database.setPro(username)
@@ -569,6 +598,20 @@ def adminDangerZone():
                 return render_template('alertMessage.html', message="Error deleting global message")
         
         return render_template('admin.html')
-    
+
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    return render_template('alertMessage.html', Admessage="Error: " + str(e), message="Uh oh! Something went wrong, please try again later. If this error persists, please contact us at support@mynote.ink", advanced=True)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('alertMessage.html', Admessage="Error: " + str(e), message="Uh oh! Something went wrong, please try again later. If this error persists, please contact us at support@mynote.ink", advanced=True)
+
+@app.route('/advancedError', methods=['POST', 'GET'])
+def advancedError(message):
+    return render_template('advancedError.html', message=message)
+
+
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)

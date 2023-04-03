@@ -28,6 +28,19 @@
         <div class="share-button">
             <button onclick="getShareLink()" class="button">Share</button>
         </div>
+        {% if loaderIsOwner %}
+        <div class="button-container">
+            <form method="POST" action="{{ url_for('editDeleteNote', noteID=noteID) }}">
+                <button type="submit" class="button">Delete Note</button>
+            </form>
+            
+            <form method="POST" action="{{ url_for('editNote', id=noteID) }}">
+                <button type="submit" class="button">Edit Note</button>
+            </form>
+
+        </div>   
+        {% endif %}
+    
         <div class="note-card">
             <h1>{{ noteTitle }}</h1>
             <p>{{ noteContent }}</p>
