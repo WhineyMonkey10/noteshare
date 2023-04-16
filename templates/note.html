@@ -34,9 +34,11 @@
                 <button type="submit" class="button">Delete Note</button>
             </form>
             
-            <form method="POST" action="{{ url_for('editNote', id=noteID) }}">
+            <form method="GET" action="{{ url_for('editNote', noteID=noteID) }}">
+                <input type="hidden" name="id" value="{{ noteID }}">
                 <button type="submit" class="button">Edit Note</button>
             </form>
+            
 
         </div>   
         {% endif %}

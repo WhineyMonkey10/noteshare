@@ -370,22 +370,36 @@ class Database:
     
     def changeTitle(self, noteID, title):
         try:
-            if self.collection.find_one({"_id": ObjectId(noteID)}):
-                self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"title": title}})
-                return True
+            if ObjectId.is_valid(noteID):
+                if self.collection.find_one({"_id": ObjectId(noteID)}):
+                    self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"title": title}})
+                    return True
+                else:
+                    return False
             else:
-                return False
+                if self.collection.find_one({"CustomID": noteID}):
+                    self.collection.update_one({"CustomID": noteID}, {"$set": {"title": title}})
+                    return True
+                else:
+                    return False
             
         except Exception as e:
             return e
     
     def changeContent(self, noteID, content):
         try:
-            if self.collection.find_one({"_id": ObjectId(noteID)}):
-                self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"content": content}})
-                return True
+            if ObjectId.is_valid(noteID):
+                if self.collection.find_one({"_id": ObjectId(noteID)}):
+                    self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"content": content}})
+                    return True
+                else:
+                    return False
             else:
-                return False
+                if self.collection.find_one({"CustomID": noteID}):
+                    self.collection.update_one({"CustomID": noteID}, {"$set": {"content": content}})
+                    return True
+                else:
+                    return False
         except Exception as e:
             return e
     

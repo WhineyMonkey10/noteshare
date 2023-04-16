@@ -6,6 +6,7 @@ from waitress import serve
 import stripe
 import os
 from dotenv import load_dotenv
+
 Database = Database()
 
 
@@ -340,18 +341,44 @@ def manageUser():
         return render_template('login.html')
 
 
-@app.route('/editNote/<id>', methods=['POST', 'GET'])
-def editNote(id):
+@app.route('/editNote/<noteID>', methods=['POST', 'GET'])
+def editNote(noteID):
     if 'logged_in' in session:
         if request.method == 'GET':
-            return render_template('editnote.html', note=Database.getNoteById(id))
-        if request.method == 'POST':
-            # Check if the note id exists in the database
+            id = noteID
             if Database.checkNoteExists(id):
-                print('Note exists')
+                if Database.getNoteCreator(id) == Database.getUserID(session['username']):
+                    if ObjectId.is_valid(id):
+                        note = Database.getNoteById(id)
+                        currentTitle = note['title']
+                        currentContent = note['content']
+                    elif Database.checkNoteCustomID(id):
+                        note = Database.getNoteByCustomID(id)
+                        currentTitle = note['title']
+                        currentContent = note['content']
+                    return render_template('editnote.html', noteTitle = currentTitle, noteContent = currentContent)
+                else:
+                    return render_template('alertMessage.html', message='You do not have permission to edit this note.')
+        if request.method == 'POST':
+            id = noteID
+            if Database.checkNoteExists(id):
+                if Database.getNoteCreator(id) == Database.getUserID(session['username']):
+                    title = request.form['title']
+                    if title == '':
+                        return render_template('alertMessage.html', message='You must enter a title.')
+                    if len(title) > 20:
+                        return render_template('alertMessage.html', message='Your title must be less than 20 characters.') 
+                    content = request.form['content']
+                    Database.changeTitle(id, title)
+                    Database.changeContent(id, content)
+                    return render_template('alertMessage.html', message='Note successfully edited.')
+                else:
+                    return render_template('alertMessage.html', message='You do not have permission to edit this note.')
             else:
-                print('Note does not exist')
-        
+                return render_template('alertMessage.html', message='That note does not exist.')
+        return render_template('editnote.html')
+    else:
+        return render_template('login.html')
 
 @app.route('/manageNotes', methods=['POST', 'GET'])
 def manageNotes():
@@ -566,13 +593,13 @@ def adminDangerZone():
         return render_template('admin.html')
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html')
+
 @app.errorhandler(Exception)
 def handle_exception(e):
     return render_template('alertMessage.html', message="Error: " + str(e))
-
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
 
 
 if __name__ == '__main__':
