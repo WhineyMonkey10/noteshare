@@ -1,54 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='styles/dashboard.css') }}"/>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noteshare - Dashboard</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
-  </head>
-  <body>
-    <header>
-      <h1>Welcome, {{username}}!</h1>
-      {% if globalMessage != False %}
-      <h2>Alert: {{globalMessage.message}}</h2>
-      {% endif %}
-      <h2>Pro status: {{userHasPro}}</h2>
-      {% if userHasPro != True %}
-      <h2><a href="{{ url_for('purchase')}}">Buy Pro!</a></h2>
-      {% endif %}
-      <div class="user-menu">
-        <button class="profile-btn" onclick="location.href='/manageProfile'">Manage Profile</button>
-        <a href="/logout">Logout</a>
-      </div>
-    </header>
-    <main>
-      <div class="sidebar">
-        <h2>Dashboard</h2>
-        <p>Hi {{username}}, welcome to your dashboard!</p>
-        <ul>
-          <li><a href="/addNote">Create a new note</a></li>
-          <li><a href="/publicNotes">View public notes</a></li>
-          <li><a href="{{ url_for('passwordProtectedNoteList', userID=userID)}}">View your password protected notes</a></li>
-          <li><a href="{{ url_for('privateNoteList', userID=userID)}}">View your private notes</a></li>
-        </ul>
-      </div>
-      <div class="content">
-        <h2>Statistics</h2>
-        <p>Total created notes: {{ total }}</p>
-        <p>Created public notes: {{ public }}</p>
-        <p>Created password protected notes: {{ passwordProtected }}</p>
-        <p>Created private notes: {{ private }}</p>
-        <footer>Note: If you make a password protected note which is private, it will count as a private note. Also, if you delete a note, it will not be removed from your count.</footer>
-      </div>
-    </main>
-    <footer>
-      <p class="user-id">User ID: {{userID}}</p>
-      <a href="mailto:support@mynote.ink">Contact us <a>|</a> <a href="https://github.com/WhineyMonkey10/noteshare">Github</a><a/></a>
-    </footer>
-  </body>
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='styles/dashboard.css') }}"/>
+</head>
+<body>
+    <link
+    href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap"
+    rel="stylesheet"
+  />
+<div class="dashboard-container">
+    <!--<div class="greeting-header">
+        <h1>Hello!</h1>
+      </div>    -->  
+<div class="sidebar">
+  <h3>Dashboard</h3>
+  <ul>
+    <li><a href="/addNote">Create a new note</a></li>
+    <li><a href="/publicNotes">View public notes</a></li>
+    <li><a href="{{ url_for('passwordProtectedNoteList', userID=userID)}}">View your password protected notes</a></li>
+    <li><a href="{{ url_for('privateNoteList', userID=userID)}}">View your private notes</a></li>
+  </ul>
+  <div class="user-id">User ID: {{userID}}</div>
+  <div class="user-id">Pro status: {{userHasPro}}</div>
+</div>
+<div class="main-content">
+  <div class="header">
+    <div class="profile">
+      <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile Picture" id="profile-picture">
+    </div>
+    <div class="dropdown" id="profile-dropdown">
+      <ul>
+        <li><a href="/manageProfile">Manage account</a></li>
+        {% if userHasPro != True %}
+        <li><a href="{{ url_for('purchase')}}">Buy Pro</a></li>
+        {% endif %}
+        <li><a href="/logout">Log out</a></li>
+      </ul>
+    </div>
+          
+  </div>
+  <div class="stats">
+    <div class="stats-item" data-percent="50">
+      <i class="stats-icon fas fa-users"></i>
+      <h4>Public</h4>
+      <p>{{ public }}</p>
+    </div>
+    <div class="stats-item" data-percent="25">
+      <i class="stats-icon fas fa-chart-line"></i>
+      <h4>Private</h4>
+      <p>{{ private }}</p>
+    </div>
+    <div class="stats-item" data-percent="15">
+      <i class="stats-icon fas fa-shopping-cart"></i>
+      <h4>Password</h4>
+      <p>{{ passwordProtected }}</p>
+    </div>
+  </div>
+  <div class="footer">
+<div class="footer-links">
+  <a href="mailto:support@mynote.ink">Contact us</a> | <a href="https://github.com/WhineyMonkey10/noteshare">GitHub</a>
+</div>
+</div>
+
+  </div>
+</div>
+<script>
+      const profilePicture = document.getElementById("profile-picture");
+  const profileDropdown = document.getElementById("profile-dropdown");
+
+  profilePicture.addEventListener("click", () => {
+    profileDropdown.style.display = profileDropdown.style.display === "block" ? "none" : "block";
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!profilePicture.contains(event.target) && !profileDropdown.contains(event.target)) {
+      profileDropdown.style.display = "none";
+    }
+  });
+</script>
+</body>
 </html>
