@@ -413,3 +413,18 @@ class Database:
         else:
             return False
 
+    def noteUpdate(self, noteID, title, content):
+        if self.collection.find_one({"CustomID": noteID}):
+            self.collection.update_one({"CustomID": noteID}, {"$set": {"title": title, "content": content}})
+            return True
+        else:
+            if self.collection.find_one({"_id": ObjectId(noteID)}):
+                self.collection.update_one({"_id": ObjectId(noteID)}, {"$set": {"title": title, "content": content}})
+                return True
+            
+    def updateCustomIDNote(self, title, content, id):
+        if self.collection.find_one({"CustomID": id}):
+            self.collection.update_one({"CustomID": id}, {"$set": {"title": title, "content": content}})
+            return True
+        else:
+            return False
