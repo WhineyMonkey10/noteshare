@@ -597,10 +597,10 @@ def adminDangerZone():
 #@app.errorhandler(Exception)
 #def handle_exception(e):
 #    return render_template('alertMessage.html', message="Error: " + str(e))
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html')
-
-
+#@app.errorhandler(404)
+#def page_not_found(e):
+#    return render_template('404.html')
+#
+#
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)
