@@ -356,7 +356,7 @@ def editNote(noteID):
                         note = Database.getNoteByCustomID(id)
                         currentTitle = note['title']
                         currentContent = note['content']
-                    return render_template('editnote.html', noteTitle = currentTitle, noteContent = currentContent)
+                    return render_template('editNote.html', noteTitle = currentTitle, noteContent = currentContent)
                 else:
                     return render_template('alertMessage.html', message='You do not have permission to edit this note.')
         if request.method == 'POST':
@@ -376,7 +376,7 @@ def editNote(noteID):
                     return render_template('alertMessage.html', message='You do not have permission to edit this note.')
             else:
                 return render_template('alertMessage.html', message='That note does not exist.')
-        return render_template('editnote.html')
+        return render_template('editNote.html')
     else:
         return render_template('login.html')
 
@@ -594,13 +594,13 @@ def adminDangerZone():
 
 
 
-#@app.errorhandler(Exception)
-#def handle_exception(e):
-#    return render_template('alertMessage.html', message="Error: " + str(e))
-#@app.errorhandler(404)
-#def page_not_found(e):
-#    return render_template('404.html')
-#
-#
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return render_template('alertMessage.html', message="Error: " + str(e))
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
+
+
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000, threads=1)
