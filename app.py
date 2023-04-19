@@ -594,9 +594,9 @@ def adminDangerZone():
 
 
 
-@app.errorhandler(Exception)
-def handle_exception(e):
-    return render_template('alertMessage.html', message="Error: " + str(e))
+#@app.errorhandler(Exception)
+#def handle_exception(e):
+#    return render_template('alertMessage.html', message="Error: " + str(e))
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
