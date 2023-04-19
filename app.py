@@ -56,7 +56,15 @@ def privateNotes(id, noteCreator, noteID):
                 id = note['_id']
                 if 'CustomID' in note:
                     id = note['CustomID']
-                return render_template('note.html', noteTitle=title, noteContent=content, noteID=id, userID=creator)
+                loaderIsOwner = Database.getNoteCreator(id)
+                if 'logged_in' not in session:
+                    loaderIsOwner = False
+                else:
+                    if loaderIsOwner == Database.getUserID(session['username']):
+                        loaderIsOwner = True
+                    else:
+                        loaderIsOwner = False
+                return render_template('note.html', noteTitle=title, noteContent=content, noteID=id, userID=creator, loaderIsOwner=loaderIsOwner)
             return render_template('alertMessage.html', message='You do not have access to this note.')
     else:
         return login()
