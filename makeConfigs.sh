@@ -57,7 +57,7 @@ else
     fi
 
     if [ -z "$8" ]; then
-        read -p "Encrypted? (y/n): " encrypted
+        read -p "Encrypted? (y/n): HIGHLY RECOMMENDED " encrypted
     else
         encrypted=$8
     fi

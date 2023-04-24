@@ -12,17 +12,17 @@ load_dotenv()
 uri = os.getenv("URI")
 
 client = MongoClient(uri)
-database = client[str(os.getenv("DATABASE"))]
-collection = database[str(os.getenv("COLLECTION"))]
-users = database[str(os.getenv("USERCOLLECTION"))]
-ecryptionKey = str(os.getenv("ENCRYPTIONKEY"))
-globalMessages = (database[str(os.getenv("GMESSAGECOLLECTION"))])
+database = client[str(os.getenv("DATABASE"))] # Imports the database name from the config file
+collection = database[str(os.getenv("COLLECTION"))] # Imports the collection name from the config file
+users = database[str(os.getenv("USERCOLLECTION"))] # Imports the user collection name from the config file
+ecryptionKey = str(os.getenv("ENCRYPTIONKEY")) # Imports the encryption key from the config file
+globalMessages = (database[str(os.getenv("GMESSAGECOLLECTION"))]) # Imports the global message collection name from the config file
 
 
-if ecryptionKey != "":
+if ecryptionKey != "": # Checks if the encryption key is empty (if so, it's disabled)
     encrypt = Fernet(codecs.encode((ecryptionKey).encode('utf-8'), 'base64'))     
 
-print(f"Connected to {uri} and the application is running.")
+print(f"Connected to {uri} and the application is running.") # Prints the connection string to the console, will be removed in the future due to security reasons
     
 
 class Database:

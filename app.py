@@ -12,15 +12,15 @@ Database = Database()
 
 app = Flask(__name__)
 load_dotenv()
-app.secret_key = os.getenv('SECRETKEY')
-app.config['STRIPE_SECRET_KEY'] = str(os.getenv('SECRETSTRIPEKEY'))
-app.config['STRIPE_PUBLIC_KEY'] = str(os.getenv('PUBLISHSTRIPEKEY'))
-stripe.api_key = app.config['STRIPE_SECRET_KEY']
-stripePriceID = str(os.getenv('STRIPEPRICEID'))
-endpoint_secret = str(os.getenv('STRIPEENDPOINTSECRET'))
+app.secret_key = os.getenv('SECRETKEY') # Imports the secret key from the config file
+app.config['STRIPE_SECRET_KEY'] = str(os.getenv('SECRETSTRIPEKEY')) # Imports the stripe secret key from the config file
+app.config['STRIPE_PUBLIC_KEY'] = str(os.getenv('PUBLISHSTRIPEKEY')) # Imports the stripe public key from the config file
+stripe.api_key = app.config['STRIPE_SECRET_KEY'] # Sets the stripe api key to the secret key
+stripePriceID = str(os.getenv('STRIPEPRICEID')) # Imports the stripe price id from the config file
+endpoint_secret = str(os.getenv('STRIPEENDPOINTSECRET')) # Imports the stripe endpoint secret from the config file
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST', 'GET']) # Login page
 def login():
     if 'logged_in' not in session:
         if request.method == 'GET':
@@ -41,7 +41,7 @@ def login():
     else:
         return index()
 
-@app.route('/privateNotes', methods=['POST', 'GET'])
+@app.route('/privateNotes', methods=['POST', 'GET']) # Private notes page
 def privateNotes(id, noteCreator, noteID):
     if 'logged_in' in session:
         if 'logged_in' not in session:
@@ -69,7 +69,7 @@ def privateNotes(id, noteCreator, noteID):
     else:
         return login()
 
-@app.route('/publicNotes')
+@app.route('/publicNotes') # Public notes page
 def index():
     if 'logged_in' in session:
         notes = Database.getNotes()
@@ -78,7 +78,7 @@ def index():
     else:
         return render_template('login.html')
 
-@app.route('/note/<id>')
+@app.route('/note/<id>') # Note page
 def note(id):
     if Database.checkNoteExists(id) == False:
         return render_template('alertMessage.html', message='This note does not exist.')
@@ -136,7 +136,7 @@ def note(id):
             else:
                 return render_template('login.html')
 
-@app.route('/accessProtectedNote/<id>', methods=['POST', 'GET'])
+@app.route('/accessProtectedNote/<id>', methods=['POST', 'GET']) # Protected note page
 def accessProtectedNote(id):
     if Database.checkNoteExists(id) == False:
         return render_template('alertMessage.html', message='This note does not exist.')
@@ -199,7 +199,7 @@ def accessProtectedNote(id):
             else:
                 return render_template('login.html')
 
-@app.route('/addNote', methods=['POST', 'GET'])
+@app.route('/addNote', methods=['POST', 'GET']) # Add note page
 def addNote():
     if 'logged_in' in session:
         if request.method == 'POST':
@@ -280,14 +280,14 @@ def addNote():
         return render_template('login.html')
 
 
-@app.route('/logout', methods=['POST', 'GET'])
+@app.route('/logout', methods=['POST', 'GET']) # Logout page
 def logout():
     session.pop('username', None)
     session.pop('password', None)
     session.pop('logged_in', None)
     return render_template('login.html')
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/register', methods=['POST', 'GET']) # Register page
 def register():
     if 'logged_in' not in session:
         if request.method == 'GET':
@@ -303,7 +303,7 @@ def register():
     else:
         return index()
     
-@app.route('/admin', methods=['POST', 'GET'])
+@app.route('/admin', methods=['POST', 'GET']) # Admin page
 def admin():
     if 'logged_in' in session and session['username'] == 'admin':
         return render_template('admin.html')
@@ -313,7 +313,7 @@ def admin():
         else:
             return render_template('login.html')
     
-@app.route('/deleteNote/<id>', methods=['POST', 'GET'])
+@app.route('/deleteNote/<id>', methods=['POST', 'GET']) # Delete note page
 def delete(id):
     if 'logged_in' in session and session['username'] == 'admin':
         Database.deleteNote({"_id": ObjectId(id)})
@@ -321,7 +321,7 @@ def delete(id):
     else:
         return render_template('index.html')
     
-@app.route('/manageUser', methods=['POST', 'GET'])
+@app.route('/manageUser', methods=['POST', 'GET']) # Manage user page
 def manageUser():
     if 'logged_in' in session and session['username'] == 'admin':
         user = request.form['username']
@@ -349,7 +349,7 @@ def manageUser():
         return render_template('login.html')
 
 
-@app.route('/editNote/<noteID>', methods=['POST', 'GET'])
+@app.route('/editNote/<noteID>', methods=['POST', 'GET']) # Edit note page
 def editNote(noteID):
     if 'logged_in' in session:
         if request.method == 'GET':
@@ -388,7 +388,7 @@ def editNote(noteID):
     else:
         return render_template('login.html')
 
-@app.route('/manageNotes', methods=['POST', 'GET'])
+@app.route('/manageNotes', methods=['POST', 'GET']) # Manage notes page
 def manageNotes():
     if 'logged_in' in session and session['username'] == 'admin':
         noteid = request.form['noteId']
@@ -404,14 +404,14 @@ def manageNotes():
     else:
         return render_template('login.html')
     
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET']) # Dashboard page
 def dashboard():
     if 'logged_in' in session:
         return render_template('dashboard.html', globalMessage=Database.getGlobalMessages(), username=session['username'], userID=Database.getUserID(session['username']), total=Database.getStatistics(Database.getUserID(session['username']), 'total'), public=Database.getStatistics(Database.getUserID(session['username']), 'public'), private=Database.getStatistics(Database.getUserID(session['username']), 'private'), passwordProtected=Database.getStatistics(Database.getUserID(session['username']), 'password'), userHasPro=Database.checkPro(session['username']))
     else:
         return render_template('login.html')
 
-@app.route('/privateNoteList/<userID>', methods=['POST', 'GET'])
+@app.route('/privateNoteList/<userID>', methods=['POST', 'GET']) # Private note list page
 def privateNoteList(userID):
     if 'logged_in' in session:
         userID = Database.getUserID(session['username'])
@@ -421,7 +421,7 @@ def privateNoteList(userID):
     else:
         return render_template('login.html')
 
-@app.route('/passwordProtectedNoteList/<userID>', methods=['POST', 'GET'])
+@app.route('/passwordProtectedNoteList/<userID>', methods=['POST', 'GET']) # Password protected note list page
 def passwordProtectedNoteList(userID):
     if 'logged_in' in session:
         userID = Database.getUserID(session['username'])
@@ -430,12 +430,12 @@ def passwordProtectedNoteList(userID):
     else:
         return render_template('login.html')
 
-@app.route('/manageProfile', methods=['POST', 'GET'])
+@app.route('/manageProfile', methods=['POST', 'GET']) # Manage profile page
 def manageProfile():
     if 'logged_in' in session:
         return render_template('manageProfile.html', message="")
 
-@app.route('/editProfile', methods=['POST', 'GET'])
+@app.route('/editProfile', methods=['POST', 'GET']) # Edit profile page
 def editProfile():
     if 'logged_in' in session:
         newUsername = request.form['username']
@@ -460,7 +460,7 @@ def editProfile():
         
         
 
-@app.route('/deleteProfile', methods=['POST', 'GET'])
+@app.route('/deleteProfile', methods=['POST', 'GET']) # Delete profile page
 def deleteProfile():
     if 'logged_in' in session:
         if request.method == 'POST':
@@ -474,7 +474,7 @@ def deleteProfile():
     else:
         return login()
 
-@app.route('/userDeleteNote', methods=['POST', 'GET'])
+@app.route('/userDeleteNote', methods=['POST', 'GET']) # Delete note page
 def userDeleteNote():
     if 'logged_in' in session:
         if ObjectId.is_valid(request.form['noteID']):
@@ -493,7 +493,7 @@ def userDeleteNote():
     else:
         return render_template('login.html')
     
-@app.route('/editDeleteNote', methods=['POST', 'GET'])
+@app.route('/editDeleteNote', methods=['POST', 'GET']) # Edit note page
 def editDeleteNote():
     if 'logged_in' in session:
         note_id = request.args.get('noteID')
@@ -514,7 +514,7 @@ def editDeleteNote():
         return render_template('login.html')
 
 
-@app.route('/thanks', methods=['POST', 'GET'])
+@app.route('/thanks', methods=['POST', 'GET']) # Thanks page for purchasing premium, currently not in use
 def thanks():
     if 'logged_in' in session:
         return render_template('paymentComplete.html')
@@ -522,7 +522,7 @@ def thanks():
         return render_template('login.html')
     
     
-@app.route('/purchase', methods=['POST', 'GET'])
+@app.route('/purchase', methods=['POST', 'GET']) # Purchase premium page
 def purchase():
     if 'logged_in' in session:
         stripeSession = stripe.checkout.Session.create(
@@ -543,7 +543,7 @@ def purchase():
         return render_template('login.html')
 
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST']) # Webhook for stripe
 def webhook():
     payload = request.get_data()
     event = None
@@ -573,7 +573,7 @@ def webhook():
 
     return jsonify(success=True)
 
-@app.route('/adminDangerZone', methods=['POST', 'GET'])
+@app.route('/adminDangerZone', methods=['POST', 'GET']) # Admin page
 def adminDangerZone():
     if 'logged_in' in session and session['username'] == 'admin':
         message = request.form['globalBanner']
@@ -602,13 +602,13 @@ def adminDangerZone():
 
 
 
-@app.errorhandler(Exception)
+@app.errorhandler(Exception) # Error handler
 def handle_exception(e):
     return render_template('alertMessage.html', message="Error: " + str(e))
-@app.errorhandler(404)
+@app.errorhandler(404) # 404 error handler
 def page_not_found(e):
     return render_template('404.html')
 
 
 if __name__ == '__main__':
-    serve(app, host='0.0.0.0', port=5000, threads=1)
+    serve(app, host='0.0.0.0', port=5000, threads=1) # Run the app
