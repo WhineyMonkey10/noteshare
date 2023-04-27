@@ -66,8 +66,9 @@ else
 
     if [ "$encrypted" = "y" ]; then
         echo -e "\e[32mGenerating an encryption key (used for sensitive info)...\e[0m"
-        while [ ${#encryptionKey} -lt 64 ]; do
-            encryptionKey=$(openssl rand  32)
+        while [ ${#encryptionKey} -lt 32 ]; do
+            random_bytes=$(openssl rand -hex 16)
+            encryptionKey=$(echo -n "$random_bytes" | base64 -d | head -c 32 | base64 -w 0)
         done
         echo -e "\e[32mEncryption key generated\e[0m"
     fi
