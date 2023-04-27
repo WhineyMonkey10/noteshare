@@ -49,12 +49,14 @@ else
         userCollection=$6
     fi
 
-    echo "Please enter a secret key"
     if [ -z "$7" ]; then
-        read -p "Secret Key: " secretKey
+        echo -e "\e[32mGenerating a secret key (used for the flask app)...\e[0m"
+        secretKey=$(openssl rand -hex 32)
+        echo -e "\e[32mSecret key generated\e[0m"
     else
         secretKey=$7
     fi
+
 
     if [ -z "$8" ]; then
         read -p "Encrypted? (y/n): HIGHLY RECOMMENDED " encrypted
@@ -63,17 +65,14 @@ else
     fi
 
     if [ "$encrypted" = "y" ]; then
-        echo "Please enter the encryption key"
-        if [ -z "$9" ]; then
-            read -p "Encryption Key: " encryptionKey
-            while [ ${#encryptionKey} -lt 32 ]; do
-                echo "Encryption key must be 32 bytes long"
-                read -p "Encryption Key: " encryptionKey
-            done
-        else
-            encryptionKey=$9
-        fi
+        echo -e "\e[32mGenerating an encryption key (used for sensitive info)...\e[0m"
+        while [ ${#encryptionKey} -lt 64 ]; do
+            encryptionKey=$(openssl rand  32)
+        done
+        echo -e "\e[32mEncryption key generated\e[0m"
     fi
+
+
 
     echo "Please enter the mongoDB collection name for the global messages"
 
@@ -126,8 +125,8 @@ COLLECTION='"${collection}"'
 USERNAME='"${username}"'
 PASSWORD='"${password}"'
 USERCOLLECTION='"${userCollection}"'
-SECRETKEY='"${secretKey}"'
-ENCRYPTIONKEY='"${encryptionKey}"'
+SECRETKEY='"$secretKey"'
+ENCRYPTIONKEY='"$encryptionKey"'
 GMESSAGECOLLECTION='"${gMessageCollection}"'
 PUBLISHSTRIPEKEY='"${stripeKeyPublishable}"'
 SECRETSTRIPEKEY='"${stripeKeySecret}"'
@@ -135,5 +134,5 @@ STRIPEPRICEID='"${stripePriceID}"'
 STRIPEENDPOINTSECRET='"${stripeEP}"'
 ' >> .env
 
-
+echo -e "\e[32mConfig file created\e[0m"
 fi
