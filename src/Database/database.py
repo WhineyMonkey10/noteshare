@@ -6,6 +6,7 @@ from cryptography.fernet import Fernet
 import codecs
 import os
 from dotenv import load_dotenv
+import random
 
 load_dotenv()
 
@@ -29,6 +30,15 @@ class Database:
     def __init__(self):
         self.collection = collection
         self.globalMessages = globalMessages
+    
+    def sampleConnection(self):
+        try:
+            username = random.randint(0, 100000)
+            users.insert_one({"username": username, "password": "test"})
+            print("Connected to the database.")
+            users.delete_one({"username": username})
+        except ConnectionFailure:
+            print("Failed to connect to the database. {0}".format(ConnectionFailure))
         
     def insertNote(self, title, content, userID, private):
         self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private})
