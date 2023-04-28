@@ -89,8 +89,12 @@ class Database:
         
     def deleteNote(self, id):
         try:
-            self.collection.delete_one(id)
-            return True
+            if self.collection.find_one({"_id": ObjectId(id)}):
+                self.collection.delete_one({"_id": ObjectId(id)})
+                return True
+            elif self.collection.find_one({"CustomID": id}):
+                self.collection.delete_one({"CustomID": id})
+                return True
         except:
             return False
         
