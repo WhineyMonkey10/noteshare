@@ -90,6 +90,14 @@ class Database:
     def deleteNote(self, id):
         try:
             if self.collection.find_one({"CustomID": id}):
+                if not self.collection.find_one({"CustomID": id})["private"] == "False":
+                    if not self.collection.find_one({"CustomID": id})["protected"] == "False":
+                        users.update_one({"_id": ObjectId(self.collection.find_one({"CustomID": id})["userID"])}, {"$inc": {"passwordNoteCount": -1}})
+                    else:
+                        users.update_one({"_id": ObjectId(self.collection.find_one({"CustomID": id})["userID"])}, {"$inc": {"privateNoteCount": -1}})
+                else:
+                    users.update_one({"_id": ObjectId(self.collection.find_one({"CustomID": id})["userID"])}, {"$inc": {"publicNoteCount": -1}})
+                
                 self.collection.delete_one({"CustomID": id})
                 return True
             elif self.collection.find_one({"_id": ObjectId(id)}):
