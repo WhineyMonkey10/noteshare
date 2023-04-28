@@ -393,7 +393,7 @@ def manageNotes():
     if 'logged_in' in session and session['username'] == 'admin':
         noteid = request.form['noteId']
         if request.form.get('deleteNote'):
-            Database.deleteNote({"_id": ObjectId(noteid)})
+            Database.deleteNote(noteid)
         if request.form.get('changeTitleCheck'):
             newTitle = request.form['changeTitle']
             Database.changeTitle(noteid, newTitle)
