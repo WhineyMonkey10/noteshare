@@ -89,13 +89,15 @@ class Database:
         
     def deleteNote(self, id):
         try:
-            if self.collection.find_one({"_id": ObjectId(id)}):
-                self.collection.delete_one({"_id": ObjectId(id)})
-                return True
-            elif self.collection.find_one({"CustomID": id}):
+            if self.collection.find_one({"CustomID": id}):
                 self.collection.delete_one({"CustomID": id})
                 return True
-        except:
+            elif self.collection.find_one({"_id": ObjectId(id)}):
+                self.collection.delete_one({"_id": ObjectId(id)})
+                return True
+            
+        except Exception as e:
+            print (e)
             return False
         
     def clearUserNotes(self, username):
