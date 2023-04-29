@@ -1,74 +1,95 @@
 body {
-    background-color: #121212;
-    font-family: sans-serif;
-    margin: 0;
-    color: #fff;
-    text-emphasis-color: #fff;
-}
-
-h1 {
-    font-size: 36px;
-    margin: 40px auto 20px;
-    text-align: center;
-}
-
-form {
+    background: linear-gradient(to bottom, #222, #111);
+    height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .login-container {
+    width: 400px;
     margin: 0 auto;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-top: 20px;
+    padding: 50px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 20px;
+    color: #fff;
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+  }
+  
+  .login-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 36px;
+  }
+  
+  form label {
+    display: block;
+    margin-bottom: 10px;
     font-size: 18px;
-    font-weight: bold;
-}
-
-input[type="text"],
-input[type="password"] {
+  }
+  
+  form input {
+    width: 100%;
     padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #121212;
-    background-color: #1c1c1c;
-}
-
-input[type="submit"] {
-    margin-top: 20px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: #4285f4;
-    color: white;
-    text-decoration: none;
-    text-align: center;
-    font-weight: bold;
+    margin-bottom: 20px;
+    border-radius: 10px;
     border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 18px;
+  }
+  
+  form button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 18px;
     cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #3d7ee7;
-}
-
-a {
-    display: cube;
+    transition: all 0.3s ease;
+  }
+  
+  form button:hover {
+    background-color: #0049b7;
+  }
+  
+  form button:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 2px #007bff;
+  }
+  
+  form input:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 2px #007bff;
+  }
+  
+  .create-account {
     margin-top: 20px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: #4285f4;
-    color: white;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .create-account p {
+    display: inline-block;
+    margin-right: 5px;
+  }
+  
+  .create-account a {
+    color: #007bff;
     text-decoration: none;
-    text-align: center;
-    font-weight: bold;
-}
-
-a:hover {
-    background-color: #3d7ee7;
-}
-
-footer {
-    font-size: 12px;
-    margin: 20px auto 0;
-    text-align: center;
-    color: #999;
-}
+    border-bottom: 1px solid #007bff;
+    transition: all 0.3s ease;
+  }
+  
+  .create-account a:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .create-account a:active,
+  .create-account a:focus {
+    outline: none;
+    border-bottom: 1px solid #007bff;
+  }
+  
