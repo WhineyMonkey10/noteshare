@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 
 Database = Database()
-
+Database.group = Database.group()
 
 app = Flask(__name__)
 load_dotenv()
@@ -612,16 +612,24 @@ def groupDashboard():
 @app.route('/groupCreate', methods=['POST', 'GET']) # Group create page
 def groupCreate():
     if 'logged_in' in session:
-        return render_template('groupCreate.html')
+        if request.method == 'POST':
+            groupName = request.form['name']
+            if Database.group.createGroup(groupName, Database.getUserID(session['username'])) and len(groupName) < 11:
+                return render_template('alertMessage.html', message="Successfully created group")
+            else:
+                return render_template('alertMessage.html', message="Error creating group")
+        if request.method == 'GET':
+            return render_template('createGroup.html')
+        return render_template('createGroup.html')
     else:
         return render_template('login.html')
 
-@app.errorhandler(Exception) # Error handler
-def handle_exception(e):
-    return render_template('alertMessage.html', message="Error: " + str(e))
-@app.errorhandler(404) # 404 error handler
-def page_not_found(e):
-    return render_template('404.html')
+# @app.errorhandler(Exception) # Error handler
+# def handle_exception(e):
+#     return render_template('alertMessage.html', message="Error: " + str(e))
+# @app.errorhandler(404) # 404 error handler
+# def page_not_found(e):
+#     return render_template('404.html')
 
 
 if __name__ == '__main__':

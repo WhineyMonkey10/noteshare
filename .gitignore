@@ -2,3 +2,5 @@
 server.crt
 server.csr
 server.key
+templates/createGroup.html
+templates/groupDashboard.html
