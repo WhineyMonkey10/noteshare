@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/sytle.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <title>Join group</title>
+
+    <script>
+        function checkForWhiteSpace(event) {
+            let title = document.getElementById("title").value;
+            let content = document.getElementById("content").value;
+
+            if (/^\s*$/.test(title)) {
+                alert("Title cannot be empty or contain only spaces");
+                event.preventDefault();
+            }
+
+            if (/^\s*$/.test(content)) {
+                alert("Content cannot be empty or contain only spaces");
+                event.preventDefault();
+            }
+        }
+    </script>
+</head>
+<body>
+    
+    <h1>Join group</h1>
+    <form action="{{ url_for('groupJoin') }}" onsubmit="checkForWhiteSpace(event)" method="POST">
+        <label for="title">Group Join Code</label>
+        <input type="text" name="joinCode" id="joinCode" required>
+
+        <input type="submit" value="Join group">
+    </form>
+
+</body>
+</html>

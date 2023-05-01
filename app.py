@@ -605,7 +605,18 @@ def adminDangerZone():
 @app.route('/groupDashboard', methods=['POST', 'GET']) # Group dashboard page
 def groupDashboard():
     if 'logged_in' in session:
-        return render_template('groupDashboard.html')
+        members = 0
+        if Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))):
+            for member in Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))):
+                members += 1
+        else:
+            members = "You are not in a group"
+        if Database.group.checkUserGroupName(Database.getUserID(session['username'])):
+            groupName = Database.group.checkUserGroupName(Database.getUserID(session['username']))
+        else:
+            groupName = "You are not in a group"
+        
+        return render_template('groupDashboard.html', groupName = groupName, memberAmount = members)
     else:
         return render_template('login.html')
 
@@ -623,13 +634,34 @@ def groupCreate():
         return render_template('createGroup.html')
     else:
         return render_template('login.html')
+    
+    
+@app.route('/groupJoin', methods=['POST', 'GET']) # Group join page
+def groupJoin():
+    if 'logged_in' in session:
+        if request.method == "POST":
+            joinCode = request.form['joinCode']
+            if Database.group.addUserToGroup(joinCode, Database.getUserID(session['username'])):
+                return render_template('alertMessage.html', message="Successfully joined group")
+            else:
+                return render_template('alertMessage.html', message="Error joining group")
+        if request.method == "GET":
+            return render_template('joinGroup.html')
+        return render_template('joinGroup.html')
+    else:
+        return render_template('login.html')
+    
+@app.route('/groupLeave', methods=['POST', 'GET']) # Group leave page
+def groupLeave():
+    Database.group.removeUserFromGroup(Database.getUserID(session['username']))
+    return render_template('alertMessage.html', message="Successfully left group")
 
-# @app.errorhandler(Exception) # Error handler
-# def handle_exception(e):
-#     return render_template('alertMessage.html', message="Error: " + str(e))
-# @app.errorhandler(404) # 404 error handler
-# def page_not_found(e):
-#     return render_template('404.html')
+@app.errorhandler(Exception) # Error handler
+def handle_exception(e):
+    return render_template('alertMessage.html', message="Error: " + str(e))
+@app.errorhandler(404) # 404 error handler
+def page_not_found(e):
+    return render_template('404.html')
 
 
 if __name__ == '__main__':

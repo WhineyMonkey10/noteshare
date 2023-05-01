@@ -480,8 +480,11 @@ class Database:
                     if self.groups.find_one({"members": ObjectId(userID)}):
                         return False
                     else:
-                        self.groups.update_one({"name": groupName}, {"$push": {"members": userID}})
-                        return True
+                        if not self.groups.find_one({"name": groupName}):
+                            return False
+                        else:
+                            self.groups.update_one({"name": groupName}, {"$push": {"members": userID}})
+                            return True
                 else:
                     return False
             except:
@@ -497,6 +500,7 @@ class Database:
                         if self.groups.find_one({"members": ObjectId(groupOwner)}):
                             return False
                         else: 
+                            
                             self.groups.insert_one({"name": name, "owner": groupOwner, "members": [groupOwner]})
                             return True
                     else:
@@ -505,21 +509,31 @@ class Database:
                 return False
             
         def getGroupMembers(self, name):
-            if self.groups.find_one({"name": name})["members"] != None:
-                return self.groups.find_one({"name": name})["members"]
-            else:
+            try:
+                if self.groups.find_one({"name": name}) != None:
+                    return self.groups.find_one({"name": name})["members"]
+                else:
+                    return False
+            except:
                 return False
         
         def checkUserGroupName(self, userID):
-            if self.groups.find({"members": userID})["name"] != None:
-                return self.groups.find({"members": userID})["name"]
-            else:
+            try:
+                if self.groups.find_one({"members": ObjectId(userID)})["name"]:
+                    return self.groups.find_one({"members": ObjectId(userID)})["name"]
+                else:
+                    return False
+            except:
                 return False
-        
-        def getUserGroups(self, userID):
-            if self.groups.find({"members": userID})["name"] != None:
-                return self.groups.find({"members": userID})["name"]
-            else:
-                return False     
+    
             
-            
+        def removeUserFromGroup(self, userID):
+            try:
+                if self.groups.find_one({"members": ObjectId(userID)}):
+                    groupName = self.groups.find_one({"members": ObjectId(userID)})["name"]
+                    self.groups.update_one({"name": groupName}, {"$pull": {"members": userID}})
+                    return True
+                else:
+                    return False
+            except:
+                return False

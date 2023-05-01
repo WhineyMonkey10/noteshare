@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noteshare - Group Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles/dashboard.css?v=1.0.0">
+</head>
+<body>
+    <link
+    href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap"
+    rel="stylesheet"
+  />
+<div class="dashboard-container">
+    <!--<div class="greeting-header">
+        <h1>Hello!</h1>
+      </div>    -->  
+<div class="sidebar">
+  <h3>Dashboard</h3>
+  <ul>
+    <li><a href="/groupCreate">Create a group</a></li>
+    <li><a href="/">Group notes</a></li>
+    <li><a href="/groupJoin">Join a group</a></li>
+    <li><a href="/groupLeave">Leave your current group</a></li>
+    <li><a href="/">View group members</a></li>
+    <li><a href="/">Dashboard</a></li>
+  </ul>
+  <div class="user-id">User ID: {{userID}}</div>
+  <div class="user-id">Pro status: {{userHasPro}}</div>
+</div>
+<div class="main-content">
+  <div class="header">
+    <div class="profile">
+      <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile Picture" id="profile-picture">
+    </div>
+    <div class="dropdown" id="profile-dropdown">
+      <ul>
+        <li><a href="/manageProfile">Manage account</a></li>
+        {% if userHasPro != True %}
+        <li><a href="{{ url_for('purchase')}}">Buy Pro</a></li>
+        {% endif %}
+        <li><a href="/logout">Log out</a></li>
+      </ul>
+    </div>
+          
+  </div>
+  <div class="stats">
+    <div class="stats-item" data-percent="50">
+      <i class="stats-icon fas fa-users"></i>
+      <h4>Group member count</h4>
+      <p>{{ memberAmount }}</p>
+    </div>
+    <div class="stats-item" data-percent="25">
+      <i class="stats-icon fas fa-chart-line"></i>
+      <h4>Total group notes</h4>
+      <p>{{ private }}</p>
+    </div>
+    <div class="stats-item" data-percent="15">
+      <i class="stats-icon fas fa-shopping-cart"></i>
+      <h4>Group join code</h4>
+      <p>{{ groupName }}</p>
+    </div>
+  </div>
+  <div class="footer">
+<div class="footer-links">
+  <a href="mailto:support@mynote.ink">Contact us</a> | <a href="https://github.com/WhineyMonkey10/noteshare">GitHub</a>
+</div>
+</div>
+
+  </div>
+</div>
+<script>
+      const profilePicture = document.getElementById("profile-picture");
+  const profileDropdown = document.getElementById("profile-dropdown");
+
+  profilePicture.addEventListener("click", () => {
+    profileDropdown.style.display = profileDropdown.style.display === "block" ? "none" : "block";
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!profilePicture.contains(event.target) && !profileDropdown.contains(event.target)) {
+      profileDropdown.style.display = "none";
+    }
+  });
+</script>
+</body>
+</html>
