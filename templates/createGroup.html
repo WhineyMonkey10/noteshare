@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/sytle.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <title>Create group</title>
+
+    <script>
+        function checkForWhiteSpace(event) {
+            let title = document.getElementById("title").value;
+            let content = document.getElementById("content").value;
+
+            if (/^\s*$/.test(title)) {
+                alert("Title cannot be empty or contain only spaces");
+                event.preventDefault();
+            }
+
+            if (/^\s*$/.test(content)) {
+                alert("Content cannot be empty or contain only spaces");
+                event.preventDefault();
+            }
+        }
+    </script>
+</head>
+<body>
+    
+    <h1>Add note</h1>
+    <form action="{{ url_for('addNote') }}" onsubmit="checkForWhiteSpace(event)" method="POST">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" maxlength="20" required>
+        
+        <label for="content">Content</label>
+        <textarea name="content" id="content" cols="30" rows="10" required></textarea>
+
+        {% if pro %}
+        <div class="form-group">
+            <input class="form-checkbox" type="checkbox" name="customIDCheck" id="customIDCheck">
+            <label for="customID" class="form-checkbox-label">Custom ID</label>
+            <input type="text" name="customID" id="customID" placeholder="Custom Note ID">
+        </div>
+        {% endif %}
+
+        
+        <div class="form-group">
+            <input class="form-checkbox" type="checkbox" name="isPublic" id="isPublic">
+            <label for="isPublic" class="form-checkbox-label">Password Protection</label>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" class="form-group.password">
+        </div>
+
+        <div class="form-group">
+            <input class="form-checkbox" type="checkbox" name="isPrivate" id="isPrivate">
+            <label for="isPrivate" class="form-checkbox-label">Private Note</label>
+        </div>
+
+
+        <input type="submit" value="Add note">
+    </form>
+
+</body>
+</html>

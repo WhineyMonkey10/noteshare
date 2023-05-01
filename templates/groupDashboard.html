@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noteshare - Dashboard</title>
+    <title>Noteshare - Group Dashboard</title>
     <link rel="stylesheet" type="text/css" href="/static/styles/dashboard.css?v=1.0.0">
 </head>
 <body>
@@ -19,11 +19,12 @@
 <div class="sidebar">
   <h3>Dashboard</h3>
   <ul>
-    <li><a href="/addNote">Create a new note</a></li>
-    <li><a href="/publicNotes">View public notes</a></li>
-    <li><a href="{{ url_for('passwordProtectedNoteList', userID=userID)}}">View your password protected notes</a></li>
-    <li><a href="{{ url_for('privateNoteList', userID=userID)}}">View your private notes</a></li>
-    <li><a href="{{ url_for('groupDashboard') }}">Group dashboard</a></li>
+    <li><a href="/">Create a group</a></li>
+    <li><a href="/">Group notes</a></li>
+    <li><a href="/">Join a group</a></li>
+    <li><a href="/">Leave your current group</a></li>
+    <li><a href="/">View group members</a></li>
+    <li><a href="/">Dashboard</a></li>
   </ul>
   <div class="user-id">User ID: {{userID}}</div>
   <div class="user-id">Pro status: {{userHasPro}}</div>
@@ -47,18 +48,18 @@
   <div class="stats">
     <div class="stats-item" data-percent="50">
       <i class="stats-icon fas fa-users"></i>
-      <h4>Public</h4>
-      <p>{{ public }}</p>
+      <h4>Group members</h4>
+      <p>{{ g }}</p>
     </div>
     <div class="stats-item" data-percent="25">
       <i class="stats-icon fas fa-chart-line"></i>
-      <h4>Private</h4>
+      <h4>Total group notes</h4>
       <p>{{ private }}</p>
     </div>
     <div class="stats-item" data-percent="15">
       <i class="stats-icon fas fa-shopping-cart"></i>
-      <h4>Password</h4>
-      <p>{{ passwordProtected }}</p>
+      <h4>Group owner</h4>
+      <p>{{ g }}</p>
     </div>
   </div>
   <div class="footer">

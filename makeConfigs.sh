@@ -49,19 +49,26 @@ else
         userCollection=$6
     fi
 
+    echo "Please enter the mongoDB collection name for the groups"
     if [ -z "$7" ]; then
+        read -p "Group Collection: " groupCollection
+    else
+        groupCollection=$7
+    fi
+
+    if [ -z "$8" ]; then
         echo -e "\e[32mGenerating a secret key (used for the flask app)...\e[0m"
         secretKey=$(openssl rand -hex 32)
         echo -e "\e[32mSecret key generated\e[0m"
     else
-        secretKey=$7
+        secretKey=$8
     fi
 
 
-    if [ -z "$8" ]; then
+    if [ -z "$9" ]; then
         read -p "Encrypted? (y/n): HIGHLY RECOMMENDED " encrypted
     else
-        encrypted=$8
+        encrypted=$9
     fi
 
     if [ "$encrypted" = "y" ]; then
@@ -126,6 +133,7 @@ COLLECTION='"${collection}"'
 USERNAME='"${username}"'
 PASSWORD='"${password}"'
 USERCOLLECTION='"${userCollection}"'
+GROUPCOLLECTION='"${groupCollection}"'
 SECRETKEY='"$secretKey"'
 ENCRYPTIONKEY='"$encryptionKey"'
 GMESSAGECOLLECTION='"${gMessageCollection}"'

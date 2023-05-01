@@ -16,6 +16,7 @@ client = MongoClient(uri)
 database = client[str(os.getenv("DATABASE"))] # Imports the database name from the config file
 collection = database[str(os.getenv("COLLECTION"))] # Imports the collection name from the config file
 users = database[str(os.getenv("USERCOLLECTION"))] # Imports the user collection name from the config file
+groups = database[str(os.getenv("GROUPCOLLECTION"))] # Imports the group collection name from the config file
 ecryptionKey = str(os.getenv("ENCRYPTIONKEY")) # Imports the encryption key from the config file
 globalMessages = (database[str(os.getenv("GMESSAGECOLLECTION"))]) # Imports the global message collection name from the config file
 
@@ -466,3 +467,57 @@ class Database:
             return True
         else:
             return False
+        
+    # Groups
+    class group:
+        def __init__(self) -> None:
+            self.groups = groups
+            self.users = users
+        
+        def addUserToGroup(self, groupName, userID):
+            try:
+                if self.users.find_one({"_id": ObjectId(userID)}):
+                    if self.groups.find_one({"members": ObjectId(userID)}):
+                        return False
+                    else:
+                        self.groups.update_one({"name": groupName}, {"$push": {"members": userID}})
+                        return True
+                else:
+                    return False
+            except:
+                return False
+                    
+            
+        def createGroup(self, name, groupOwner):
+            try:
+                if self.groups.find_one({"name": name}):
+                    return False
+                else:
+                    if self.users.find_one({"_id": ObjectId(groupOwner)}):
+                        if self.groups.find_one({"members": ObjectId(groupOwner)}):
+                            return False
+                        else: 
+                            self.groups.insert_one({"name": name, "owner": groupOwner, "members": [groupOwner]})
+                            return True
+                    else:
+                        return False
+            except:
+                return False
+            
+        def getGroupMembers(self, name):
+            if self.groups.find_one({"name": name})["members"] != None:
+                return self.groups.find_one({"name": name})["members"]
+            else:
+                return False
+        
+        def checkUserGroupName(self, userID):
+            if self.groups.find({"members": userID})["name"] != None:
+                return self.groups.find({"members": userID})["name"]
+            else:
+                return False
+        
+        def getUserGroups(self, userID):
+            if self.groups.find({"members": userID})["name"] != None:
+                return self.groups.find({"members": userID})["name"]
+            else:
+                return False     
