@@ -599,8 +599,22 @@ def adminDangerZone():
                 return render_template('alertMessage.html', message="Error deleting global message")
         
         return render_template('admin.html')
+    else:
+        return render_template('login.html')
 
+@app.route('/groupDashboard', methods=['POST', 'GET']) # Group dashboard page
+def groupDashboard():
+    if 'logged_in' in session:
+        return render_template('groupDashboard.html')
+    else:
+        return render_template('login.html')
 
+@app.route('/groupCreate', methods=['POST', 'GET']) # Group create page
+def groupCreate():
+    if 'logged_in' in session:
+        return render_template('groupCreate.html')
+    else:
+        return render_template('login.html')
 
 @app.errorhandler(Exception) # Error handler
 def handle_exception(e):
