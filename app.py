@@ -204,6 +204,13 @@ def addNote():
     if 'logged_in' in session:
         if request.method == 'POST':
             title = request.form['title']
+            isUserInAGroup = Database.group.checkUserGroupStatus(session['username'])
+            if request.form.get('addToGroupCheck') is not None and isUserInAGroup == True:
+                addToGroup = True
+                groupName = Database.group.checkUserGroupName(Database.getUserID(session['username']))
+            else:
+                addToGroup = False
+                groupName = None
             if len(title) > 20:
                 return render_template('alertMessage.html', message='Your note title must be less than 20 characters.')
             content = request.form['content']
@@ -217,7 +224,7 @@ def addNote():
                             customId = request.form['customID']
                             if customId == '':
                                 return render_template('alertMessage.html', message='You must enter a custom ID if you want to make your note have a custom ID.')
-                            if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True", customId):
+                            if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "True", customId, addToGroup, groupName):
                                 return index()
                             else:
                                 return render_template('alertMessage.html', message='A note with that ID already exists.')
@@ -250,14 +257,14 @@ def addNote():
                         customId = request.form['customID']
                         if customId == '':
                             return render_template('alertMessage.html', message='You must enter a custom ID if you want to make your note have a custom ID.')
-                        if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", customId):
+                        if Database.insertCustomIDNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", customId, addToGroup, groupName):
                             return index()
                         else:
                             return render_template('alertMessage.html', message='A note with that ID already exists.')
                     else:
-                        Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
+                        Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", addToGroup, groupName)
                 else:
-                    Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False")
+                    Database.insertNoteWithPassword(title, content, password, Database.getUserID(session['username']), "False", addToGroup, groupName)
                 
             else:
                 if Database.checkPro(session['username']):
@@ -265,17 +272,18 @@ def addNote():
                         customId = request.form['customID']
                         if customId == '':
                             return render_template('alertMessage.html', message='You must enter a custom ID if you want to make your note have a custom ID.')
-                        if Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "False", customId):
+                        if Database.insertCustomIDNote(title, content, Database.getUserID(session['username']), "False", customId, addToGroup, groupName):
                             return index()
                         else:
                             return render_template('alertMessage.html', message='A note with that ID already exists.')
                     else:
-                        Database.insertNote(title, content, Database.getUserID(session['username']), "False")
+                        Database.insertNote(title, content, Database.getUserID(session['username']), "False", addToGroup, groupName)
                 else:
-                    Database.insertNote(title, content, Database.getUserID(session['username']), "False")
+                    Database.insertNote(title, content, Database.getUserID(session['username']), "False", addToGroup, groupName)
+                    
             
             return index()
-        return render_template('addnote.html', pro=Database.checkPro(session['username']))
+        return render_template('addnote.html', pro=Database.checkPro(session['username']), groupStatus=isUserInAGroup)
     else:
         return render_template('login.html')
 
@@ -606,6 +614,8 @@ def adminDangerZone():
 def groupDashboard():
     if 'logged_in' in session:
         members = 0
+        userID = Database.getUserID(session['username'])
+        proStatus = Database.checkPro(session['username'])
         if Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))):
             for member in Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))):
                 members += 1
@@ -615,8 +625,16 @@ def groupDashboard():
             groupName = Database.group.checkUserGroupName(Database.getUserID(session['username']))
         else:
             groupName = "You are not in a group"
+        if Database.group.checkUserGroupName(Database.getUserID(session['username'])):
+            groupNotes = Database.group.countGroupNotes(Database.group.checkUserGroupName(Database.getUserID(session['username'])))
+            if groupNotes != False:
+                pass
+            else:
+                groupNotes = "No group notes found"
+        else:
+            groupNotes = "You are not in a group"
         
-        return render_template('groupDashboard.html', groupName = groupName, memberAmount = members)
+        return render_template('groupDashboard.html', userID=userID, proStatus = proStatus, groupName = groupName, memberAmount = members, groupNotes = groupNotes)
     else:
         return render_template('login.html')
 
@@ -648,6 +666,14 @@ def groupJoin():
         if request.method == "GET":
             return render_template('joinGroup.html')
         return render_template('joinGroup.html')
+    else:
+        return render_template('login.html')
+    
+@app.route('/viewGroupMembers', methods=['POST', 'GET']) # View group members page
+def viewGroupMembers():
+    if 'logged_in' in session:
+        print(Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))))
+        return render_template('alertMessage.html', message="Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))")
     else:
         return render_template('login.html')
     

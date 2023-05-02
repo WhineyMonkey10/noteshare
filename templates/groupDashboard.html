@@ -27,7 +27,7 @@
     <li><a href="/">Dashboard</a></li>
   </ul>
   <div class="user-id">User ID: {{userID}}</div>
-  <div class="user-id">Pro status: {{userHasPro}}</div>
+  <div class="user-id">Pro status: {{proStatus}}</div>
 </div>
 <div class="main-content">
   <div class="header">
@@ -37,7 +37,7 @@
     <div class="dropdown" id="profile-dropdown">
       <ul>
         <li><a href="/manageProfile">Manage account</a></li>
-        {% if userHasPro != True %}
+        {% if proStatus != True %}
         <li><a href="{{ url_for('purchase')}}">Buy Pro</a></li>
         {% endif %}
         <li><a href="/logout">Log out</a></li>
@@ -54,7 +54,7 @@
     <div class="stats-item" data-percent="25">
       <i class="stats-icon fas fa-chart-line"></i>
       <h4>Total group notes</h4>
-      <p>{{ private }}</p>
+      <p>{{ groupNotes }}</p>
     </div>
     <div class="stats-item" data-percent="15">
       <i class="stats-icon fas fa-shopping-cart"></i>

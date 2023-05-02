@@ -16,15 +16,19 @@
         </div>
         <ul>
             {% for note in notes %}
+             {% if note.inGroup == false %}
                 <li>
                     <a href="{{ url_for('note', id=note._id) }}">{{ note.title }}</a>
                 </li>
+                {% endif %}
             {% endfor %}
 
             {% for note in customIdNotes %}
+            {% if note.inGroup == false %}
                 <li>
                     <a href="{{ url_for('note', id=note.CustomID) }}">{{ note.title }}</a>
                 </li>
+                {% endif %}
             {% endfor %}
         </ul>
         <div class="button-container">

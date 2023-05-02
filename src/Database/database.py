@@ -31,6 +31,7 @@ class Database:
     def __init__(self):
         self.collection = collection
         self.globalMessages = globalMessages
+        self.groups = self.group()
     
     def sampleConnection(self):
         try:
@@ -41,8 +42,8 @@ class Database:
         except ConnectionFailure:
             print("Failed to connect to the database. {0}".format(ConnectionFailure))
         
-    def insertNote(self, title, content, userID, private):
-        self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private})
+    def insertNote(self, title, content, userID, private, addToGroup, groupName):
+        self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "inGroup": addToGroup, "groupName": groupName})
         if private == "True":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
             return True
@@ -50,11 +51,11 @@ class Database:
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"publicNoteCount": 1}})
             return True
             
-    def insertCustomIDNote(self, title, content, userID, private, id):
+    def insertCustomIDNote(self, title, content, userID, private, id, addToGroup, groupName):
         if self.collection.count_documents({"customID": id}) > 0:
             return False
         else:
-            self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "CustomID": id})
+            self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "CustomID": id, "inGroup": addToGroup, "groupName": groupName})
             if private == "True":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
                 return True
@@ -62,11 +63,11 @@ class Database:
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"publicNoteCount": 1}})
                 return True
     
-    def insertCustomIDNoteWithPassword(self, title, content, password, userID, private, id):
+    def insertCustomIDNoteWithPassword(self, title, content, password, userID, private, id, addToGroup, groupName):
         if self.collection.count_documents({"customID": id}) > 0:
             return False
         else:
-            self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "CustomID": id})
+            self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "CustomID": id, "inGroup": addToGroup, "groupName": groupName})
             if private == "True":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
                 return True
@@ -75,8 +76,8 @@ class Database:
                 return True
         
         
-    def insertNoteWithPassword(self, title, content, password, userID, private):
-        self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private})
+    def insertNoteWithPassword(self, title, content, password, userID, private, addToGroup, groupName):
+        self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "inGroup": addToGroup, "groupName": groupName})
         if private == "True":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
         elif private == "False":
@@ -501,7 +502,7 @@ class Database:
                             return False
                         else: 
                             
-                            self.groups.insert_one({"name": name, "owner": groupOwner, "members": [groupOwner]})
+                            self.groups.insert_one({"name": name, "owner": groupOwner, "members": [groupOwner], "notes": []})
                             return True
                     else:
                         return False
@@ -533,6 +534,24 @@ class Database:
                     groupName = self.groups.find_one({"members": ObjectId(userID)})["name"]
                     self.groups.update_one({"name": groupName}, {"$pull": {"members": userID}})
                     return True
+                else:
+                    return False
+            except:
+                return False
+            
+        def checkUserGroupStatus(self, userID):
+            try:
+                if self.groups.find_one({"members": ObjectId(userID)}):
+                    return True
+                else:
+                    return False
+            except:
+                return False
+            
+        def countGroupNotes(self, groupName):
+            try:
+                if self.groups.find_one({"name": groupName}):
+                    return len(self.groups.find_one({"name": groupName})["notes"])
                 else:
                     return False
             except:

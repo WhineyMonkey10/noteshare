@@ -23,6 +23,19 @@
                 event.preventDefault();
             }
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const privateNoteCheckbox = document.getElementById('isPrivate');
+            const addToGroupCheckbox = document.getElementById('addToGroupCheck');
+
+            privateNoteCheckbox.addEventListener('change', () => {
+                if (privateNoteCheckbox.checked) {
+                    addToGroupCheckbox.style.display = 'none';
+                } else {
+                    addToGroupCheckbox.style.display = 'block';
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -43,7 +56,13 @@
         </div>
         {% endif %}
 
-        
+        {% if groupStatus %}
+        <div class="form-group">
+            <input class="form-checkbox" type="checkbox" name="addToGroupCheck" id="addToGroupCheck">
+            <label for="addToGroupCheck" class="form-checkbox-label">Add to group</label>
+        </div>
+        {% endif %}
+
         <div class="form-group">
             <input class="form-checkbox" type="checkbox" name="isPublic" id="isPublic">
             <label for="isPublic" class="form-checkbox-label">Password Protection</label>
