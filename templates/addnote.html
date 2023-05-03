@@ -36,6 +36,19 @@
                 }
             });
         });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const privateNoteCheckbox = document.getElementById('addToGroupCheck');
+            const addToGroupCheckbox = document.getElementById('isPrivate');
+
+            privateNoteCheckbox.addEventListener('change', () => {
+                if (privateNoteCheckbox.checked) {
+                    addToGroupCheckbox.style.display = 'none';
+                } else {
+                    addToGroupCheckbox.style.display = 'block';
+                }
+            });
+        });
     </script>
 </head>
 <body>

@@ -204,10 +204,13 @@ def addNote():
     if 'logged_in' in session:
         if request.method == 'POST':
             title = request.form['title']
-            isUserInAGroup = Database.group.checkUserGroupStatus(session['username'])
-            if request.form.get('addToGroupCheck') is not None and isUserInAGroup == True:
-                addToGroup = True
-                groupName = Database.group.checkUserGroupName(Database.getUserID(session['username']))
+            isUserInAGroup = Database.group.checkUserGroupStatus(Database.getUserID(session['username']))
+            if request.form.get('addToGroupCheck') is not None:
+                if isUserInAGroup == False:
+                    return render_template('alertMessage.html', message='You are not in a group.')
+                else:
+                    addToGroup = True
+                    groupName = Database.group.checkUserGroupName(Database.getUserID(session['username']))
             else:
                 addToGroup = False
                 groupName = None
@@ -283,6 +286,7 @@ def addNote():
                     
             
             return index()
+        isUserInAGroup = Database.group.checkUserGroupStatus(Database.getUserID(session['username']))
         return render_template('addnote.html', pro=Database.checkPro(session['username']), groupStatus=isUserInAGroup)
     else:
         return render_template('login.html')
