@@ -24,31 +24,36 @@
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const privateNoteCheckbox = document.getElementById('isPrivate');
-            const addToGroupCheckbox = document.getElementById('addToGroupCheck');
+        function toggleButtons() {
+            let addToGroupCheck = document.getElementById("addToGroupCheck");
+            let isPrivate = document.getElementById("isPrivate");
 
-            privateNoteCheckbox.addEventListener('change', () => {
-                if (privateNoteCheckbox.checked) {
-                    addToGroupCheckbox.style.display = 'none';
-                } else {
-                    addToGroupCheckbox.style.display = 'block';
-                }
-            });
-        });
+            if (addToGroupCheck.checked) {
+                isPrivate.disabled = true;
+                isPrivate.checked = false;
+            } else {
+                isPrivate.disabled = false;
+            }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const privateNoteCheckbox = document.getElementById('addToGroupCheck');
-            const addToGroupCheckbox = document.getElementById('isPrivate');
+            if (isPrivate.checked) {
+                addToGroupCheck.disabled = true;
+                addToGroupCheck.checked = false;
+            } else {
+                addToGroupCheck.disabled = false;
+            }
+        }
 
-            privateNoteCheckbox.addEventListener('change', () => {
-                if (privateNoteCheckbox.checked) {
-                    addToGroupCheckbox.style.display = 'none';
-                } else {
-                    addToGroupCheckbox.style.display = 'block';
-                }
-            });
-        });
+        window.onload = function() {
+            let addToGroupCheck = document.getElementById("addToGroupCheck");
+            let isPrivate = document.getElementById("isPrivate");
+
+            addToGroupCheck.addEventListener("change", toggleButtons);
+            isPrivate.addEventListener("change", toggleButtons);
+        }
+
+
+
+
     </script>
 </head>
 <body>

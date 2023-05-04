@@ -474,6 +474,8 @@ class Database:
         def __init__(self) -> None:
             self.groups = groups
             self.users = users
+            self.notes = collection
+    
         
         def addUserToGroup(self, groupName, userID):
             try:
@@ -557,6 +559,15 @@ class Database:
             except:
                 return False
 
-                    
-                        
-  
+        def addNoteIdToGroup(self, noteId, groupName):
+            try:
+                if self.groups.find_one({"name": groupName}):
+                    if self.notes.find_one({"_id": ObjectId(noteId)}):
+                        self.groups.update_one({"name": groupName}, {"$push": {"notes": noteId}})
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            except:
+                return False

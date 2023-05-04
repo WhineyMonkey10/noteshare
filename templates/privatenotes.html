@@ -16,7 +16,7 @@
         </div>
         <ul>
             {% for note in notes %}
-             {% if note.inGroup == false %}
+            {% if note.inGroup != true %}
                 <li>
                     <a href="{{ url_for('note', id=note._id) }}">{{ note.title }}</a>
                 </li>
@@ -24,7 +24,7 @@
             {% endfor %}
 
             {% for note in customIdNotes %}
-            {% if note.inGroup == false %}
+            {% if note.inGroup != true %}
                 <li>
                     <a href="{{ url_for('note', id=note.CustomID) }}">{{ note.title }}</a>
                 </li>
