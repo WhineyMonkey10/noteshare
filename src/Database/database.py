@@ -611,3 +611,18 @@ class Database:
                 
             except:
                 return False
+            
+        def getGroupNotes(self, groupName):
+            try:
+                if self.groups.find_one({"name": groupName}):
+                    noteIds = self.groups.find_one({"name": groupName})["notes"]
+                    noteContents = []
+                    for noteId in noteIds:
+                        noteContents.append(self.notes.find_one({"_id": ObjectId(noteId)}))
+                    return noteContents
+                    
+                
+                else:
+                    return False
+            except:
+                return False
