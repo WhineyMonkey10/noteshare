@@ -676,8 +676,7 @@ def groupJoin():
 @app.route('/viewGroupMembers', methods=['POST', 'GET']) # View group members page
 def viewGroupMembers():
     if 'logged_in' in session:
-        print(Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))))
-        return render_template('alertMessage.html', message="Database.group.getGroupMembers(Database.group.checkUserGroupName(Database.getUserID(session['username']))")
+        return render_template('groupMembers.html', members=Database.group.getGroupMembersUsernames(Database.group.checkUserGroupName(Database.getUserID(session['username']))))
     else:
         return render_template('login.html')
     
@@ -685,6 +684,11 @@ def viewGroupMembers():
 def groupLeave():
     Database.group.removeUserFromGroup(Database.getUserID(session['username']))
     return render_template('alertMessage.html', message="Successfully left group")
+
+@app.route('/groupNotes', methods=['POST', 'GET']) # Group notes page
+def groupNotes():
+    if 'logged_in' in session:
+        pass
 
 @app.errorhandler(Exception) # Error handler
 def handle_exception(e):

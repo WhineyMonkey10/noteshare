@@ -535,6 +535,17 @@ class Database:
             except:
                 return False
         
+        def getGroupMembersUsernames(self, name):
+            try:
+                if self.groups.find_one({"name": name}) != None:
+                    members = []
+                    for member in self.groups.find_one({"name": name})["members"]:
+                        members.append(self.users.find_one({"_id": ObjectId(member)})["username"])
+                    return members
+                
+            except:
+                return False
+                    
         def checkUserGroupName(self, userID):
             try:
                 if self.groups.find_one({"members": ObjectId(userID)})["name"]:
