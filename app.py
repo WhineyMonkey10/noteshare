@@ -630,11 +630,11 @@ def groupDashboard():
         else:
             groupName = "You are not in a group"
         if Database.group.checkUserGroupName(Database.getUserID(session['username'])):
-            groupNotes = Database.group.countGroupNotes(Database.group.checkUserGroupName(Database.getUserID(session['username'])))
-            if groupNotes != False:
-                pass
+            groupNotes = Database.group.countGroupNotes(groupName)
+            if groupNotes == False:
+                groupNotes = "You have no notes in your group"
             else:
-                groupNotes = "No group notes found"
+                groupNotes = groupNotes
         else:
             groupNotes = "You are not in a group"
         

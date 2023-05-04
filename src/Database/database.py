@@ -44,6 +44,9 @@ class Database:
         
     def insertNote(self, title, content, userID, private, addToGroup, groupName):
         self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "inGroup": addToGroup, "groupName": groupName})
+        # Get the ID of the note that was just created
+        ripeNoteID = self.collection.find_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "inGroup": addToGroup, "groupName": groupName})["_id"] # Change this later, just incase.
+        self.groups.addNoteIdToGroup(ripeNoteID, groupName)
         if private == "True":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
             return True
@@ -56,6 +59,10 @@ class Database:
             return False
         else:
             self.collection.insert_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "CustomID": id, "inGroup": addToGroup, "groupName": groupName})
+            # Get the custom ID of the note that was just created
+            ripeNoteID = self.collection.find_one({"title": title, "content": content, "protected": "False", "userID": userID, "private": private, "CustomID": id, "inGroup": addToGroup, "groupName": groupName})["CustomID"] # Change this later, just incase.
+            self.groups.addNoteIdToGroup(ripeNoteID, groupName)
+            
             if private == "True":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
                 return True
@@ -68,6 +75,9 @@ class Database:
             return False
         else:
             self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "CustomID": id, "inGroup": addToGroup, "groupName": groupName})
+            # Get the custom ID of the note that was just created
+            ripeNoteID = self.collection.find_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "CustomID": id, "inGroup": addToGroup, "groupName": groupName})["CustomID"] # Change this later, just incase.
+            self.groups.addNoteIdToGroup(ripeNoteID, groupName)
             if private == "True":
                 users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
                 return True
@@ -78,6 +88,9 @@ class Database:
         
     def insertNoteWithPassword(self, title, content, password, userID, private, addToGroup, groupName):
         self.collection.insert_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "inGroup": addToGroup, "groupName": groupName})
+        # Get the custom ID of the note that was just created
+        ripeNoteID = self.collection.find_one({"title": title, "content": content, "password": password, "protected": "True", "userID": userID, "private": private, "inGroup": addToGroup, "groupName": groupName})["_id"] # Change this later, just incase.
+        self.groups.addNoteIdToGroup(ripeNoteID, groupName)
         if private == "True":
             users.update_one({"_id": ObjectId(userID)}, {"$inc": {"privateNoteCount": 1}})
         elif private == "False":
@@ -101,9 +114,11 @@ class Database:
                     users.update_one({"_id": ObjectId(self.collection.find_one({"CustomID": id})["userID"])}, {"$inc": {"publicNoteCount": -1}})
                 
                 self.collection.delete_one({"CustomID": id})
+                self.groups.removeNoteIdFromGroup(id)
                 return True
             elif self.collection.find_one({"_id": ObjectId(id)}):
                 self.collection.delete_one({"_id": ObjectId(id)})
+                self.groups.removeNoteIdFromGroup(id)
                 return True
             
         except Exception as e:
@@ -569,5 +584,19 @@ class Database:
                         return False
                 else:
                     return False
+            except:
+                return False
+            
+        def removeNoteIdFromGroup(self, noteId):
+            try:
+                if self.notes.find_one({"_id": ObjectId(noteId)}):
+                    if self.groups.find_one({"notes": noteId}):
+                        self.groups.update_one({"notes": noteId}, {"$pull": {"notes": noteId}})
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+                
             except:
                 return False
