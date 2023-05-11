@@ -512,7 +512,8 @@ def editDeleteNote():
         if ObjectId.is_valid(note_id):
             if Database.getNoteCreator(note_id) != None:
                 if Database.getNoteCreator(note_id) == Database.getUserID(session['username']):
-                    if Database.deleteNote({"_id": ObjectId(note_id)}):
+                    
+                    if Database.deleteNote(note_id):
                         return render_template('alertMessage.html', message="Successfully deleted note")
                     else:
                         return render_template('alertMessage.html', message="Error deleting note")
